@@ -18,14 +18,19 @@ pvdb = {
         "prec": 4
     },
 
+    "PUMPING": {
+        "type": "str"
+    },
+
+    # This is a special case - do not include it in write_pvname_to_schimatzu_property.
+    "PUMPING-SET": {
+        "type": "int"
+    },
+
     "PRESS": {
         "type": "float",
         "prec": 4
     },
-
-    "ON": {
-        "type": "int"
-    }
 }
 
 write_pvname_to_schimatzu_property = {
@@ -35,7 +40,8 @@ write_pvname_to_schimatzu_property = {
 # Pump property name : PV name
 properties_to_poll = {
     "Flow": "FLOW",
-    "Pressure": "PRESS"
+    "Pressure": "PRESS",
+    "Pumping": "PUMPING"
 }
 
 
@@ -104,7 +110,7 @@ class SchimadzuDriver(Driver):
                 _logger.exception("Could not set pump property '%s' to value '%s'.", pump_value_name, value)
 
         # The PV is a START/STOP PV.
-        if reason == "ON":
+        if reason == "PUMPING-SET":
 
             try:
 

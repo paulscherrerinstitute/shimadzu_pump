@@ -6,7 +6,8 @@ from xml.etree import ElementTree
 _logger = logging.getLogger(__name__)
 
 parameters = {"Flow": ("Pumps/Pump/Usual/Flow", float),
-              "Pressure": ("Pumps/Pump/Usual/Tpress", float)}
+              "Pressure": ("Pumps/Pump/Usual/Tpress", float),
+              "Pumping": ("Pumps/Pump/Usual/Running", str)}
 
 headers = {'Content-Type': 'text'}
 
