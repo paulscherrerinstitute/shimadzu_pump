@@ -8,13 +8,12 @@ pvdb = {
     "FLOW": {
         "type": "float",
         "prec": 4,
-        "scan": 1,
+        "scan": 1
     },
 
     "FLOW-SET": {
         "type": "float",
-        "prec": 4,
-        "scan": 1,
+        "prec": 4
     }
 }
 
