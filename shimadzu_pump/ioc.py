@@ -17,6 +17,10 @@ pvdb = {
     "FLOW-SET": {
         "type": "float",
         "prec": 4
+    },
+
+    "ON": {
+        "type": "int"
     }
 }
 
@@ -84,3 +88,22 @@ class SchimadzuDriver(Driver):
 
             except:
                 _logger.exception("Could not set pump property '%s' to value '%s'.", pump_value_name, value)
+
+        # The PV is a START/STOP PV.
+        if reason == "ON":
+
+            try:
+
+                if value:
+                    _logger.info("Starting the pump.")
+                    self.communication_driver.start()
+
+                else:
+                    _logger.info("Stopping the pump.")
+                    self.communication_driver.stop()
+
+                super().setParam(reason, value)
+                self.updatePVs()
+
+            except:
+                _logger.exception("Cannot change the pump status ON to '%s'.", value)
