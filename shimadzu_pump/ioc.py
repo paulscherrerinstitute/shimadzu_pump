@@ -73,9 +73,9 @@ class SchimadzuDriver(Driver):
 
             pump_value_name = write_pvname_to_schimatzu_property[reason]
 
-            _logger.info("Setting pump property '%s' to values '%s'.", pump_value_name, value)
-
             try:
+
+                _logger.info("Setting pump property '%s' to values '%s'.", pump_value_name, value)
 
                 self.communication_driver.set(pump_value_name, value)
 
