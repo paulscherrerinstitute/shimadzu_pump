@@ -28,6 +28,7 @@ def main(pump_host, ioc_prefix, processing_interval):
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC.")
+    parser.add_argument("pump_host", type=str, help="Pump host.")
     parser.add_argument("--processing_interval", default=0.1, type=float, help="IOC processing interval.")
     parser.add_argument("--log_level", default="WARNING",
                         choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'],
@@ -37,4 +38,6 @@ if __name__ == "__main__":
 
     logging.basicConfig(stream=sys.stdout, level=arguments.log_level)
 
-    main(arguments.ioc_prefix, arguments.processing_interval)
+    main(ioc_prefix=arguments.ioc_prefix,
+         pump_host=arguments.pump_host,
+         processing_interval=arguments.processing_interval)
