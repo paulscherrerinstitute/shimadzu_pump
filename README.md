@@ -66,8 +66,10 @@ schimadzu_pump_ioc IOC_PREFIX PUMP_HOSTNAME
 ```
 
 ### Manual installation
-If you are not installing the conda package, you need to run the IOC from the root folder of this repo:
+If you are not installing the conda package, you need to set this repo into your Python path. 
+From the root of this repo run:
 ```bash
+export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 python schimadzu_pump/run.py IOC_PREFIX PUMP_HOSTNAME
 ```
 
