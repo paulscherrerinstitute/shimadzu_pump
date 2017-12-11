@@ -9,12 +9,12 @@ from shimadzu_pump import ioc
 
 def main(pump_host, ioc_prefix, pump_polling_interval):
     _logger = logging.getLogger(ioc_prefix)
-    _logger.info("Starting ioc with prefix '%s', pump polling interval '%s', and pump_host '%s'.",
+    _logger.info("Starting ioc with prefix '%s', pump polling interval '%s' seconds, and pump_host '%s'.",
                  ioc_prefix, pump_polling_interval, pump_host)
 
     server = SimpleServer()
     server.createPV(prefix=ioc_prefix, pvdb=ioc.pvdb)
-    driver = ioc.SchimadzuDriver(pump_host=pump_host, pump_polling_interval=pump_polling_interval)
+    driver = ioc.EpicsShimadzuPumpDriver(pump_host=pump_host, pump_polling_interval=pump_polling_interval)
 
     try:
 

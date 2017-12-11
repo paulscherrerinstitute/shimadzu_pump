@@ -45,11 +45,11 @@ properties_to_poll = {
 }
 
 
-class SchimadzuDriver(Driver):
+class EpicsShimadzuPumpDriver(Driver):
 
     def __init__(self, pump_host, pump_polling_interval):
         Driver.__init__(self)
-        _logger.info("Starting communication driver with pump_host '%s' and polling interval '%s'.",
+        _logger.info("Starting communication driver with pump_host '%s' and polling interval '%s' seconds.",
                      pump_host, pump_polling_interval)
 
         self.pump_polling_interval = pump_polling_interval
