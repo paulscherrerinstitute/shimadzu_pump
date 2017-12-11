@@ -9,7 +9,7 @@ _logger = logging.getLogger("SchimadzuDriver")
 
 pvdb = {
     "PUMPING": {
-        "type": "str"
+        "type": "int"
     },
 
     # This is a special case - do not include it in write_pvname_to_schimatzu_property.
@@ -27,7 +27,12 @@ pvdb = {
         "prec": 4
     },
 
-    "PRESSURE": {
+    "MIN_PRESSURE": {
+        "type": "float",
+        "prec": 4
+    },
+
+    "MAX_PRESSURE": {
         "type": "float",
         "prec": 4
     },
@@ -39,9 +44,10 @@ write_pvname_to_schimatzu_property = {
 
 # Pump property name : PV name
 properties_to_poll = {
-    "Flow": "FLOW",
-    "Pressure": "PRESSURE",
-    "Pumping": "PUMPING"
+    "flow": "FLOW",
+    "min_pressure": "MIN_PRESSURE",
+    "max_pressure": "MAX_PRESSURE",
+    "pumping": "PUMPING"
 }
 
 

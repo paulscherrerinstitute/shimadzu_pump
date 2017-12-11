@@ -5,9 +5,10 @@ from xml.etree import ElementTree
 
 _logger = logging.getLogger(__name__)
 
-parameters = {"Flow": ("Pumps/Pump/Usual/Flow", float),
-              "Pressure": ("Pumps/Pump/Usual/Tpress", float),
-              "Pumping": ("Pumps/Pump/Usual/Running", str)}
+parameters = {"flow": ("method", "get_method", "Pumps/Pump/Usual/Flow", float),
+              "max_pressure": ("method", "get_method", "Pumps/Pump/Usual/Pmax", float),
+              "min_pressure": ("method", "get_method", "Pumps/Pump/Detail/Pmin", float),
+              "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int)}
 
 headers = {'Content-Type': 'text'}
 
@@ -17,7 +18,8 @@ request_data = {
     "logout": "<Login><Mode>-1</Mode></Login>",
     "start": "<Event><Method><PumpBT>1</PumpBT></Method></Event>",
     "stop": "<Event><Method><PumpBT>0</PumpBT></Method></Event>",
-    "get": "<Method><No>0</No><Pumps></Pumps></Method>",
+    "get_method": "<Method><No>0</No><Pumps></Pumps></Method>",
+    "get_monitor": "<Monitor><Config><Situation><Pumps></Pumps></Situation></Config></Monitor>",
     "set": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Usual><%(name)s>%(value).4f</%(name)s></Usual>"
            "</Pump></Pumps></Method>"}
 
@@ -26,8 +28,8 @@ def extract_element(parameter_properties, response):
 
     _logger.debug("Trying to extract '%s' from response: %s", parameter_properties, response)
 
-    parameter_path = parameter_properties[0]
-    parameter_type = parameter_properties[1]
+    parameter_path = parameter_properties[2]
+    parameter_type = parameter_properties[3]
 
     tree = ElementTree.fromstring(response)
     string_value = tree.find(parameter_path).text
@@ -45,7 +47,8 @@ class ShimadzuCbm20(object):
 
         self.endpoints = {"login": "http://%s/cgi-bin/Login.cgi" % self.host,
                           "event": "http://%s/cgi-bin/Event.cgi" % self.host,
-                          "method": "http://%s/cgi-bin/Method.cgi" % self.host}
+                          "method": "http://%s/cgi-bin/Method.cgi" % self.host,
+                          "monitor": "http://%s/cgi-bin/Monitor.cgi" % self.host}
 
     def login(self, user="Admin", password="Admin"):
 
@@ -114,8 +117,18 @@ class ShimadzuCbm20(object):
             raise ValueError(
                 "Parameter name '%s' not recognized. Available parameters: %s" % (name, list(parameters.keys())))
 
-        get_data = request_data["get"]
-        response_text = requests.get(self.endpoints['method'], data=get_data, headers=headers).text
+        request_data_name = parameters[name][0]
+        if request_data_name not in request_data:
+            raise ValueError("Parameter '%s' specified request data name '%s' that does not exist." %
+                             (name, request_data_name))
+
+        endpoint_name = parameters[name][1]
+        if endpoint_name not in self.endpoints:
+            raise ValueError("Parameter '%s' specified endpoint name '%s' that does not exist." %
+                             (name, endpoint_name))
+
+        get_data = request_data[request_data_name]
+        response_text = requests.get(self.endpoints[endpoint_name], data=get_data, headers=headers).text
 
         return extract_element(parameters[name], response_text)
 
