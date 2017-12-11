@@ -1,3 +1,6 @@
+from threading import Thread
+from time import sleep
+
 from pcaspy import Driver
 import logging
 from shimadzu_pump.schimadzu import ShimadzuCbm20
@@ -28,11 +31,35 @@ read_pvname_to_schimatzu_property = {
 
 class SchimadzuDriver(Driver):
 
-    def __init__(self, pump_host):
+    def __init__(self, pump_host, pump_polling_interval):
         Driver.__init__(self)
-        _logger.info("Starting communication driver with pump_host '%s'.", pump_host)
+        _logger.info("Starting communication driver with pump_host '%s' and polling interval '%s'.",
+                     pump_host, pump_polling_interval)
+
+        self.pump_polling_interval = pump_polling_interval
 
         self.communication_driver = ShimadzuCbm20(pump_host)
+
+        # Start the polling thread.
+        self.polling_thread = Thread(target=self.poll_pump)
+        self.polling_thread.setDaemon(True)
+        self.polling_thread.start()
+
+    def poll_pump(self):
+
+        while True:
+
+            for pv_name, pump_property in read_pvname_to_schimatzu_property:
+
+                _logger.debug("Reading pump property '%s'.", pump_property)
+                value = self.communication_driver.get(pump_property)
+                _logger.debug("Pump property '%s'='%s'", pump_property, value)
+
+                self.setParam(pv_name, value)
+
+            self.updatePVs()
+
+            sleep(self.polling_interval)
 
     def write(self, reason, value):
 
@@ -46,19 +73,3 @@ class SchimadzuDriver(Driver):
             self.communication_driver.set(pump_value_name, value)
 
         return super().setParam(reason, value)
-
-    def read(self, reason):
-
-        # The PV is a pump parameter.
-        if reason in read_pvname_to_schimatzu_property:
-
-            # Read the value from the pump.
-            pump_value_name = read_pvname_to_schimatzu_property[reason]
-
-            _logger.info("Reading pump property '%s'.", pump_value_name)
-
-            value = self.communication_driver.get(pump_value_name)
-
-            self.setParam(reason, value)
-
-        return super().getParam(reason)
