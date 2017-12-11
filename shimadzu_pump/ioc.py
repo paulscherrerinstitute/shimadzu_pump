@@ -28,8 +28,9 @@ write_pvname_to_schimatzu_property = {
     "FLOW-SET": "Flow"
 }
 
-read_pvname_to_schimatzu_property = {
-    "FLOW": "Flow"
+# Pump property name : PV name
+properties_to_poll = {
+    "Flow": "FLOW"
 }
 
 
@@ -55,7 +56,7 @@ class SchimadzuDriver(Driver):
 
             try:
 
-                for pv_name, pump_property in read_pvname_to_schimatzu_property.items():
+                for pump_property, pv_name in properties_to_poll.items():
 
                     _logger.debug("Reading pump property '%s'.", pump_property)
                     value = self.communication_driver.get(pump_property)
