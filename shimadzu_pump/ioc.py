@@ -3,7 +3,7 @@ from time import sleep
 
 from pcaspy import Driver
 import logging
-from shimadzu_pump.schimadzu import ShimadzuCbm20
+from shimadzu_pump.shimadzu import ShimadzuCbm20
 
 _logger = logging.getLogger("SchimadzuDriver")
 
