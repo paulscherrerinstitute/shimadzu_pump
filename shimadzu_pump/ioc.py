@@ -39,8 +39,10 @@ class SchimadzuDriver(Driver):
         # The PV is a pump parameter.
         if reason in write_pvname_to_schimatzu_property:
 
-            # Write the value to the pump.
             pump_value_name = write_pvname_to_schimatzu_property[reason]
+
+            _logger.info("Setting pump property '%s' to values '%s'.", pump_value_name, value)
+
             self.communication_driver.set(pump_value_name, value)
 
         return super().setParam(reason, value)
@@ -52,6 +54,9 @@ class SchimadzuDriver(Driver):
 
             # Read the value from the pump.
             pump_value_name = read_pvname_to_schimatzu_property[reason]
+
+            _logger.info("Reading pump property '%s'.", pump_value_name)
+
             value = self.communication_driver.get(pump_value_name)
 
             self.setParam(reason, value)
