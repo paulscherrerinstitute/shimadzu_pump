@@ -32,6 +32,11 @@ pvdb = {
         "prec": 4
     },
 
+    "MAX-PRESSURE": {
+        "type": "float",
+        "prec": 4
+    },
+
     "MIN-PRESSURE-SET": {
         "type": "float",
         "prec": 4
