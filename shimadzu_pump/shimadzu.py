@@ -15,16 +15,22 @@ request_data = {
     "set": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Usual><%(name)s>%(value).4f</%(name)s></Usual>"
            "</Pump></Pumps></Method>"}
 
-parameters = {"Flow": "Pumps/Pump/Usual/Flow"}
+parameters = {"Flow": ("Pumps/Pump/Usual/Flow", float)}
 
 _logger = logging.getLogger(__name__)
 
 
-def extract_element(name, response):
-    _logger.debug("Trying to extract '%s' from response: %s", name, response)
+def extract_element(parameter_properties, response):
+
+    _logger.debug("Trying to extract '%s' from response: %s", parameter_properties, response)
+
+    parameter_path = parameter_properties[0]
+    parameter_type = parameter_properties[1]
 
     tree = ElementTree.fromstring(response)
-    return tree.find(name).text
+    string_value = tree.find(parameter_path).text
+
+    return parameter_type(string_value)
 
 
 class ShimadzuCbm20(object):
@@ -32,7 +38,7 @@ class ShimadzuCbm20(object):
 
         self.host = host
 
-        _logger.debug("Starting ShimadzuCbm20 driver with exposed parameters: %s", parameters.keys())
+        _logger.debug("Starting ShimadzuCbm20 driver with exposed parameters: %s", parameters)
 
         self.endpoints = {"login": "http://%s/cgi-bin/Login.cgi" % self.host,
                           "event": "http://%s/cgi-bin/Event.cgi" % self.host,
@@ -101,7 +107,7 @@ class ShimadzuCbm20(object):
 
     def get(self, name):
 
-        if name not in parameters and name:
+        if name not in parameters:
             raise ValueError(
                 "Parameter name '%s' not recognized. Available parameters: %s" % (name, list(parameters.keys())))
 
@@ -117,7 +123,7 @@ class ShimadzuCbm20(object):
 
         data = {}
 
-        for parameter_name, parameter_path in parameters.items():
-            data[parameter_name] = extract_element(parameter_path, response_text)
+        for parameter_name, parameter_properties in parameters.items():
+            data[parameter_name] = extract_element(parameter_properties, response_text)
 
         return data
