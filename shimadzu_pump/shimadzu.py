@@ -3,6 +3,11 @@ import logging
 import requests
 from xml.etree import ElementTree
 
+_logger = logging.getLogger(__name__)
+
+parameters = {"Flow": ("Pumps/Pump/Usual/Flow", float),
+              "Pressure": ("Pumps/Pump/Usual/Tpress", float)}
+
 headers = {'Content-Type': 'text'}
 
 request_data = {
@@ -14,11 +19,6 @@ request_data = {
     "get": "<Method><No>0</No><Pumps></Pumps></Method>",
     "set": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Usual><%(name)s>%(value).4f</%(name)s></Usual>"
            "</Pump></Pumps></Method>"}
-
-parameters = {"Flow": ("Pumps/Pump/Usual/Flow", float),
-              "Pressure": ("Pumps/Pump/Usual/Tpress", float)}
-
-_logger = logging.getLogger(__name__)
 
 
 def extract_element(parameter_properties, response):
