@@ -29,6 +29,7 @@ def extract_element(name, response):
 
 class ShimadzuCbm20(object):
     def __init__(self, host):
+
         self.host = host
 
         _logger.debug("Starting ShimadzuCbm20 driver with exposed parameters: %s", parameters.keys())
@@ -99,7 +100,8 @@ class ShimadzuCbm20(object):
         return extract_element(parameters[name], response_text)
 
     def get(self, name):
-        if name not in parameters:
+
+        if name not in parameters and name:
             raise ValueError(
                 "Parameter name '%s' not recognized. Available parameters: %s" % (name, list(parameters.keys())))
 
@@ -107,3 +109,15 @@ class ShimadzuCbm20(object):
         response_text = requests.get(self.endpoints['method'], data=get_data, headers=headers).text
 
         return extract_element(parameters[name], response_text)
+
+    def get_all(self):
+
+        get_data = request_data["get"]
+        response_text = requests.get(self.endpoints['method'], data=get_data, headers=headers).text
+
+        data = {}
+
+        for parameter_name, parameter_path in parameters.items():
+            data[parameter_name] = extract_element(parameter_path, response_text)
+
+        return data

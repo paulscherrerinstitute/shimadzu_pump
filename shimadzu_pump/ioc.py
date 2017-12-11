@@ -55,10 +55,18 @@ class SchimadzuDriver(Driver):
 
             try:
 
+                pump_data = self.communication_driver.get_all()
+
                 for pump_property, pv_name in properties_to_poll.items():
 
                     _logger.debug("Reading pump property '%s'.", pump_property)
-                    value = self.communication_driver.get(pump_property)
+
+                    if pump_property not in pump_data:
+                        _logger.warning("Pump property '%s' not in received pump data: %s", pump_property, pump_data)
+                        continue
+
+                    value = pump_data[pump_property]
+
                     _logger.debug("Pump property '%s'='%s'", pump_property, value)
 
                     super().setParam(pv_name, value)
