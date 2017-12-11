@@ -39,17 +39,36 @@ conda config --add channels paulscherrerinstitute
 
 ## RUN the IOC
 
+Executable help:
+
+```bash
+usage: schimadzu_pump_ioc [-h] [--polling_interval POLLING_INTERVAL]
+              [--log_level {CRITICAL,ERROR,WARNING,INFO,DEBUG}]
+              ioc_prefix pump_host
+
+positional arguments:
+  ioc_prefix            Prefix of the IOC.
+  pump_host             Pump host.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --polling_interval POLLING_INTERVAL
+                        Pump polling interval.
+  --log_level {CRITICAL,ERROR,WARNING,INFO,DEBUG}
+                        Log level to use.
+```
+
 ### Conda installation
 To run the IOC, first install the conda package, and then execute:
 ```bash
 # Run the IOC with the specified prefix.
-schimadzu_pump_ioc IOC_PREFIX
+schimadzu_pump_ioc IOC_PREFIX PUMP_HOSTNAME
 ```
 
 ### Manual installation
 If you are not installing the conda package, you need to run the IOC from the root folder of this repo:
 ```bash
-python schimadzu_pump/run.py IOC_PREFIX
+python schimadzu_pump/run.py IOC_PREFIX PUMP_HOSTNAME
 ```
 
 **WARNING**: You need to make sure that all the requirements mentioned in the **Requirements** section are installed.
