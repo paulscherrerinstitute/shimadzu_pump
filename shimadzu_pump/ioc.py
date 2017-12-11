@@ -18,6 +18,11 @@ pvdb = {
         "prec": 4
     },
 
+    "PRESS": {
+        "type": "float",
+        "prec": 4
+    },
+
     "ON": {
         "type": "int"
     }
@@ -29,7 +34,8 @@ write_pvname_to_schimatzu_property = {
 
 # Pump property name : PV name
 properties_to_poll = {
-    "Flow": "FLOW"
+    "Flow": "FLOW",
+    "Pressure": "PRESS"
 }
 
 

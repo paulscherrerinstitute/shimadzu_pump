@@ -15,7 +15,8 @@ request_data = {
     "set": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Usual><%(name)s>%(value).4f</%(name)s></Usual>"
            "</Pump></Pumps></Method>"}
 
-parameters = {"Flow": ("Pumps/Pump/Usual/Flow", float)}
+parameters = {"Flow": ("Pumps/Pump/Usual/Flow", float),
+              "Pressure": ("Pumps/Pump/Usual/Tpress", float)}
 
 _logger = logging.getLogger(__name__)
 
@@ -34,6 +35,7 @@ def extract_element(parameter_properties, response):
 
 
 class ShimadzuCbm20(object):
+
     def __init__(self, host):
 
         self.host = host
