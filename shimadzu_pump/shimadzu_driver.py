@@ -10,9 +10,9 @@ get_parameters = {"flow": ("method", "get_method", "Pumps/Pump/Usual/Flow", floa
                   "min_pressure": ("method", "get_method", "Pumps/Pump/Detail/Pmin", float),
                   "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int)}
 
-set_parameters = {"flow": ("method", "set_usual"),
-                  "min_pressure": ("method", "set_detail"),
-                  "max_pressure": ("method", "set_usual")}
+set_parameters = {"flow": ("method", "set_usual", "Flow"),
+                  "min_pressure": ("method", "set_detail", "Pmin"),
+                  "max_pressure": ("method", "set_usual", "Pmax")}
 
 headers = {'Content-Type': 'text'}
 
@@ -74,6 +74,8 @@ class ShimadzuCbm20(object):
         if not session_id:
             raise ValueError("You are already logged in. Please logout first.")
 
+        _logger.info("Logged in as '%s'.", user)
+
         return session_id
 
     def logout(self):
@@ -122,7 +124,9 @@ class ShimadzuCbm20(object):
             raise ValueError("Parameter '%s' specified request data name '%s' that does not exist." %
                              (name, request_data_name))
 
-        set_data = request_data[request_data_name] % {"name": name, "value": value}
+        pump_parameter_name = set_parameters[name][2]
+
+        set_data = request_data[request_data_name] % {"name": pump_parameter_name, "value": value}
         response_text = requests.get(self.endpoints[endpoint_name], data=set_data, headers=headers).text
 
         _logger.debug("Response from pump: %s", response_text)
