@@ -57,7 +57,7 @@ class SchimadzuDriver(Driver):
                     value = self.communication_driver.get(pump_property)
                     _logger.debug("Pump property '%s'='%s'", pump_property, value)
 
-                    self.setParam(pv_name, value)
+                    super().setParam(pv_name, value)
 
                 self.updatePVs()
 
