@@ -117,15 +117,15 @@ class ShimadzuCbm20(object):
             raise ValueError(
                 "Parameter name '%s' not recognized. Available parameters: %s" % (name, list(parameters.keys())))
 
-        request_data_name = parameters[name][0]
-        if request_data_name not in request_data:
-            raise ValueError("Parameter '%s' specified request data name '%s' that does not exist." %
-                             (name, request_data_name))
-
-        endpoint_name = parameters[name][1]
+        endpoint_name = parameters[name][0]
         if endpoint_name not in self.endpoints:
             raise ValueError("Parameter '%s' specified endpoint name '%s' that does not exist." %
                              (name, endpoint_name))
+
+        request_data_name = parameters[name][1]
+        if request_data_name not in request_data:
+            raise ValueError("Parameter '%s' specified request data name '%s' that does not exist." %
+                             (name, request_data_name))
 
         get_data = request_data[request_data_name]
         response_text = requests.get(self.endpoints[endpoint_name], data=get_data, headers=headers).text
@@ -134,12 +134,9 @@ class ShimadzuCbm20(object):
 
     def get_all(self):
 
-        get_data = request_data["get"]
-        response_text = requests.get(self.endpoints['method'], data=get_data, headers=headers).text
-
         data = {}
 
-        for parameter_name, parameter_properties in parameters.items():
-            data[parameter_name] = extract_element(parameter_properties, response_text)
+        for parameter_name in parameters.keys():
+            data[parameter_name] = self.get(parameter_name)
 
         return data
