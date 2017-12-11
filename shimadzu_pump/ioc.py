@@ -49,15 +49,20 @@ class SchimadzuDriver(Driver):
 
         while True:
 
-            for pv_name, pump_property in read_pvname_to_schimatzu_property:
+            try:
 
-                _logger.debug("Reading pump property '%s'.", pump_property)
-                value = self.communication_driver.get(pump_property)
-                _logger.debug("Pump property '%s'='%s'", pump_property, value)
+                for pv_name, pump_property in read_pvname_to_schimatzu_property.items():
 
-                self.setParam(pv_name, value)
+                    _logger.debug("Reading pump property '%s'.", pump_property)
+                    value = self.communication_driver.get(pump_property)
+                    _logger.debug("Pump property '%s'='%s'", pump_property, value)
 
-            self.updatePVs()
+                    self.setParam(pv_name, value)
+
+                self.updatePVs()
+
+            except:
+                _logger.exception("Could not read pump properties.")
 
             sleep(self.polling_interval)
 
