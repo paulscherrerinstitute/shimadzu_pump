@@ -57,6 +57,8 @@ class ShimadzuCbm20(object):
 
     def login(self, user="Admin", password="Admin"):
 
+        self.logout()
+
         _logger.info("Trying to log in as '%s'.", user)
 
         login_data = request_data["login"] % (user, password)
@@ -65,7 +67,7 @@ class ShimadzuCbm20(object):
 
         _logger.debug("Response from pump: %s", response_text)
 
-        session_id = extract_element("Certification/SessionID", response_text)
+        session_id = extract_element((None, None, "Certification/SessionID", str), response_text)
 
         _logger.debug("Received session_id='%s'.", session_id)
 

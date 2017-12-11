@@ -69,6 +69,9 @@ class EpicsShimadzuPumpDriver(Driver):
 
         self.communication_driver = ShimadzuCbm20(pump_host)
 
+        # Login to the pump.
+        self.communication_driver.login()
+
         # Start the polling thread.
         self.polling_thread = Thread(target=self.poll_pump)
         self.polling_thread.setDaemon(True)
