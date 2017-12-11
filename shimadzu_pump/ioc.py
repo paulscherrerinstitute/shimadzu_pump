@@ -76,8 +76,11 @@ class SchimadzuDriver(Driver):
             _logger.info("Setting pump property '%s' to values '%s'.", pump_value_name, value)
 
             try:
+
                 self.communication_driver.set(pump_value_name, value)
+
+                super().setParam(reason, value)
+                self.updatePVs()
+
             except:
                 _logger.exception("Could not set pump property '%s' to value '%s'.", pump_value_name, value)
-
-        return super().setParam(reason, value)
