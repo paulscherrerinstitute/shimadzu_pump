@@ -10,8 +10,7 @@ _logger = logging.getLogger("SchimadzuDriver")
 pvdb = {
     "FLOW": {
         "type": "float",
-        "prec": 4,
-        "scan": 1
+        "prec": 4
     },
 
     "FLOW-SET": {
