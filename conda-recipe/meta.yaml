@@ -1,0 +1,28 @@
+package:
+    name: shimadzu_pump
+    version: 0.0.1
+
+build:
+  number: 0
+
+source:
+    path: ..
+
+requirements:
+    build:
+        - python
+    run:
+        - python
+        - requests
+        - pcaspy
+
+test:
+  source_files:
+    - tests/
+
+build:
+  entry_points:
+    - schimadzu_pump_ioc = shimadzu_pump.run:main
+
+about:
+    summary: "Just a Shimadzu pump controller."
