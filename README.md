@@ -74,3 +74,11 @@ python schimadzu_pump/run.py IOC_PREFIX PUMP_HOSTNAME
 ```
 
 **WARNING**: You need to make sure that all the requirements mentioned in the **Requirements** section are installed.
+
+## Available PVs
+
+- \[IOC_PREFIX\] PUMPING (Read back value of the pump status)
+- \[IOC_PREFIX\] PUMPING-SET (Set point for starting (write 1) or stopping (write 0) the pump)
+- \[IOC_PREFIX\] FLOW (Read back value of the pump flow)
+- \[IOC_PREFIX\] FLOW-SET (Set point for the pump flow)
+- \[IOC_PREFIX\] PRESSURE (Read back value of the pump pressure)
