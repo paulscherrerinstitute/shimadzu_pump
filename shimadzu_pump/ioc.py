@@ -27,26 +27,33 @@ pvdb = {
         "prec": 4
     },
 
-    "MIN_PRESSURE": {
+    "MIN-PRESSURE": {
         "type": "float",
         "prec": 4
     },
 
-    "MAX_PRESSURE": {
+    "MIN-PRESSURE-SET": {
+        "type": "float",
+        "prec": 4
+    },
+
+    "MAX-PRESSURE-SET": {
         "type": "float",
         "prec": 4
     },
 }
 
 write_pvname_to_schimatzu_property = {
-    "FLOW-SET": "Flow"
+    "FLOW-SET": "flow",
+    "MIN-PRESSURE-SET": "min_pressure",
+    "MAX-PRESSURE-SET": "max_pressure"
 }
 
 # Pump property name : PV name
 properties_to_poll = {
     "flow": "FLOW",
-    "min_pressure": "MIN_PRESSURE",
-    "max_pressure": "MAX_PRESSURE",
+    "min_pressure": "MIN-PRESSURE",
+    "max_pressure": "MAX-PRESSURE",
     "pumping": "PUMPING"
 }
 

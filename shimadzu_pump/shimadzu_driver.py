@@ -10,7 +10,9 @@ get_parameters = {"flow": ("method", "get_method", "Pumps/Pump/Usual/Flow", floa
                   "min_pressure": ("method", "get_method", "Pumps/Pump/Detail/Pmin", float),
                   "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int)}
 
-set_parameters = {"flow": ("method", "set_usual")}
+set_parameters = {"flow": ("method", "set_usual"),
+                  "min_pressure": ("method", "set_detail"),
+                  "max_pressure": ("method", "set_usual")}
 
 headers = {'Content-Type': 'text'}
 
@@ -23,7 +25,10 @@ request_data = {
     "get_method": "<Method><No>0</No><Pumps></Pumps></Method>",
     "get_monitor": "<Monitor><Config><Situation><Pumps></Pumps></Situation></Config></Monitor>",
     "set_usual": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Usual><%(name)s>%(value).4f</%(name)s></Usual>"
-                 "</Pump></Pumps></Method>"}
+                 "</Pump></Pumps></Method>",
+    "set_detail": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Detail><%(name)s>%(value).4f</%(name)s></Detail>"
+                 "</Pump></Pumps></Method>"
+}
 
 
 def extract_element(parameter_properties, response):
