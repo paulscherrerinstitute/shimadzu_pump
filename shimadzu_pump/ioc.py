@@ -64,7 +64,7 @@ class SchimadzuDriver(Driver):
             except:
                 _logger.exception("Could not read pump properties.")
 
-            sleep(self.polling_interval)
+            sleep(self.pump_polling_interval)
 
     def write(self, reason, value):
 
