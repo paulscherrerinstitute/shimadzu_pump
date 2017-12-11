@@ -8,6 +8,15 @@ from shimadzu_pump.shimadzu_driver import ShimadzuCbm20
 _logger = logging.getLogger("SchimadzuDriver")
 
 pvdb = {
+    "PUMPING": {
+        "type": "str"
+    },
+
+    # This is a special case - do not include it in write_pvname_to_schimatzu_property.
+    "PUMPING-SET": {
+        "type": "int"
+    },
+
     "FLOW": {
         "type": "float",
         "prec": 4
@@ -16,15 +25,6 @@ pvdb = {
     "FLOW-SET": {
         "type": "float",
         "prec": 4
-    },
-
-    "PUMPING": {
-        "type": "str"
-    },
-
-    # This is a special case - do not include it in write_pvname_to_schimatzu_property.
-    "PUMPING-SET": {
-        "type": "int"
     },
 
     "PRESSURE": {
