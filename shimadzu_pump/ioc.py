@@ -2,7 +2,7 @@ from pcaspy import Driver
 import logging
 from shimadzu_pump.schimadzu import ShimadzuCbm20
 
-_logger = logging.getLogging("SchimadzuDriver")
+_logger = logging.getLogger("SchimadzuDriver")
 
 pvdb = {
     "FLOW": {
