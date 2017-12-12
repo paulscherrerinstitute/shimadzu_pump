@@ -35,12 +35,12 @@ def extract_element(parameter_properties, response):
     _logger.debug("Trying to extract '%s' from response: %s", parameter_properties, response)
 
     parameter_path = parameter_properties[2]
-    parameter_type = parameter_properties[3]
+    parameter_converter = parameter_properties[3]
 
     tree = ElementTree.fromstring(response)
     string_value = tree.find(parameter_path).text
 
-    return parameter_type(string_value)
+    return parameter_converter(string_value)
 
 
 class ShimadzuCbm20(object):
@@ -91,44 +91,50 @@ class ShimadzuCbm20(object):
 
         _logger.info("Starting pump.")
 
-        start_data = request_data["start"]
-        response_text = requests.get(self.endpoints["event"], data=start_data, headers=header_data).text
+        start_request_data = request_data["start"]
 
+        response_text = requests.get(self.endpoints["event"], data=start_request_data, headers=header_data).text
         _logger.debug("Response from pump: %s", response_text)
 
     def stop(self):
 
         _logger.info("Stopping pump.")
 
-        stop_data = request_data["stop"]
-        response_text = requests.get(self.endpoints["event"], data=stop_data, headers=header_data).text
+        stop_request_data = request_data["stop"]
 
+        response_text = requests.get(self.endpoints["event"], data=stop_request_data, headers=header_data).text
         _logger.debug("Response from pump: %s", response_text)
+
+    def _get_request_data(self, name, parameters):
+        if name not in parameters:
+            raise ValueError(
+                "Parameter name '%s' not recognized. Available parameters: %s" % (
+                    name, list(parameters.keys())))
+
+        parameter_properties = parameters[name]
+
+        endpoint_name = parameter_properties[0]
+        if endpoint_name not in self.endpoints:
+            raise ValueError("Parameter '%s' specified endpoint name '%s' that does not exist." %
+                             (name, endpoint_name))
+
+        request_data_name = parameter_properties[1]
+        if request_data_name not in request_data:
+            raise ValueError("Parameter '%s' specified request data name '%s' that does not exist." %
+                             (name, request_data_name))
+
+        return self.endpoints[endpoint_name], request_data[request_data_name], parameter_properties
 
     def set(self, name, value):
 
         _logger.debug("Setting parameter '%s'='%s'.", name, value)
 
-        if name not in set_parameters:
-            raise ValueError(
-                "Parameter name '%s' not recognized. Available set_parameters: %s" % (
-                    name, list(set_parameters.keys())))
+        endpoint, set_request_data, parameter_properties = self._get_request_data(name, set_parameters)
 
-        endpoint_name = set_parameters[name][0]
-        if endpoint_name not in self.endpoints:
-            raise ValueError("Parameter '%s' specified endpoint name '%s' that does not exist." %
-                             (name, endpoint_name))
+        pump_parameter_name = parameter_properties[2]
+        set_request_data = set_request_data % {"name": pump_parameter_name, "value": value}
 
-        request_data_name = set_parameters[name][1]
-        if request_data_name not in request_data:
-            raise ValueError("Parameter '%s' specified request data name '%s' that does not exist." %
-                             (name, request_data_name))
-
-        pump_parameter_name = set_parameters[name][2]
-
-        set_data = request_data[request_data_name] % {"name": pump_parameter_name, "value": value}
-        response_text = requests.get(self.endpoints[endpoint_name], data=set_data, headers=header_data).text
-
+        response_text = requests.get(endpoint, data=set_request_data, headers=header_data).text
         _logger.debug("Response from pump: %s", response_text)
 
         return extract_element(get_parameters[name], response_text)
@@ -137,24 +143,9 @@ class ShimadzuCbm20(object):
 
         _logger.debug("Getting parameter '%s'.", name)
 
-        if name not in get_parameters:
-            raise ValueError(
-                "Parameter name '%s' not recognized. Available get_parameters: %s" % (
-                    name, list(get_parameters.keys())))
+        endpoint, get_request_data, parameter_properties = self._get_request_data(name, get_parameters)
 
-        endpoint_name = get_parameters[name][0]
-        if endpoint_name not in self.endpoints:
-            raise ValueError("Parameter '%s' specified endpoint name '%s' that does not exist." %
-                             (name, endpoint_name))
-
-        request_data_name = get_parameters[name][1]
-        if request_data_name not in request_data:
-            raise ValueError("Parameter '%s' specified request data name '%s' that does not exist." %
-                             (name, request_data_name))
-
-        get_data = request_data[request_data_name]
-        response_text = requests.get(self.endpoints[endpoint_name], data=get_data, headers=header_data).text
-
+        response_text = requests.get(endpoint, data=get_request_data, headers=header_data).text
         _logger.debug("Response from pump: %s", response_text)
 
         return extract_element(get_parameters[name], response_text)
@@ -164,7 +155,6 @@ class ShimadzuCbm20(object):
         _logger.debug("Getting all parameters.")
 
         data = {}
-
         for parameter_name in get_parameters.keys():
             data[parameter_name] = self.get(parameter_name)
 
