@@ -8,12 +8,14 @@ _logger = logging.getLogger("SchimadzuDriver")
 
 pvdb = {
     "PUMPING": {
-        "type": "int"
+        "type": "enum",
+        'enums': ['OFF', 'ON']
     },
 
     # This is a special case - do not include it in write_pvname_to_schimatzu_property.
-    "PUMPING-SET": {
-        "type": "int"
+    "PUMPING_SP": {
+        "type": "enum",
+        'enums': ['OFF', 'ON']
     },
 
     "FLOW": {
@@ -21,43 +23,44 @@ pvdb = {
         "prec": 4
     },
 
-    "FLOW-SET": {
+    "FLOW_SP": {
         "type": "float",
         "prec": 4
     },
 
-    "MIN-PRESSURE": {
+    "PRESSURE_MIN": {
         "type": "float",
         "prec": 4
     },
 
-    "MAX-PRESSURE": {
+    "PRESSURE_MAX": {
         "type": "float",
         "prec": 4
     },
 
-    "MIN-PRESSURE-SET": {
+    "PRESSURE_MIN_SP": {
         "type": "float",
         "prec": 4
     },
 
-    "MAX-PRESSURE-SET": {
+    "PRESSURE_MAX_SP": {
         "type": "float",
         "prec": 4
     },
 }
 
+# PV name : Pump property name
 write_pvname_to_schimatzu_property = {
-    "FLOW-SET": "flow",
-    "MIN-PRESSURE-SET": "min_pressure",
-    "MAX-PRESSURE-SET": "max_pressure"
+    "FLOW_SP": "flow",
+    "PRESSURE_MIN_SP": "min_pressure",
+    "PRESSURE_MAX_SP": "max_pressure"
 }
 
 # Pump property name : PV name
 properties_to_poll = {
     "flow": "FLOW",
-    "min_pressure": "MIN-PRESSURE",
-    "max_pressure": "MAX-PRESSURE",
+    "min_pressure": "PRESSURE_MIN",
+    "max_pressure": "PRESSURE_MAX",
     "pumping": "PUMPING"
 }
 
@@ -128,7 +131,7 @@ class EpicsShimadzuPumpDriver(Driver):
                 _logger.exception("Could not set pump property '%s' to value '%s'.", pump_value_name, value)
 
         # The PV is a START/STOP PV.
-        if reason == "PUMPING-SET":
+        if reason == "PUMPING_SP":
 
             try:
 
