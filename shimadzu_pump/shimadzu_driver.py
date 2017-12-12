@@ -14,7 +14,7 @@ set_parameters = {"flow": ("method", "set_usual", "Flow"),
                   "min_pressure": ("method", "set_detail", "Pmin"),
                   "max_pressure": ("method", "set_usual", "Pmax")}
 
-headers = {'Content-Type': 'text'}
+header_data = {'Content-Type': 'text'}
 
 request_data = {
     "login": "<Login><Mode>0</Mode><Certification><UserID>%s</UserID><Password>%s</Password>"
@@ -63,7 +63,7 @@ class ShimadzuCbm20(object):
 
         login_data = request_data["login"] % (user, password)
 
-        response_text = requests.get(self.endpoints["login"], data=login_data, headers=headers).text
+        response_text = requests.get(self.endpoints["login"], data=login_data, headers=header_data).text
 
         _logger.debug("Response from pump: %s", response_text)
 
@@ -83,7 +83,7 @@ class ShimadzuCbm20(object):
         _logger.info("Logging out.")
 
         logout_data = request_data["logout"]
-        response_text = requests.get(self.endpoints["login"], data=logout_data, headers=headers).text
+        response_text = requests.get(self.endpoints["login"], data=logout_data, headers=header_data).text
 
         _logger.debug("Response from pump: %s", response_text)
 
@@ -92,7 +92,7 @@ class ShimadzuCbm20(object):
         _logger.info("Starting pump.")
 
         start_data = request_data["start"]
-        response_text = requests.get(self.endpoints["event"], data=start_data, headers=headers).text
+        response_text = requests.get(self.endpoints["event"], data=start_data, headers=header_data).text
 
         _logger.debug("Response from pump: %s", response_text)
 
@@ -101,7 +101,7 @@ class ShimadzuCbm20(object):
         _logger.info("Stopping pump.")
 
         stop_data = request_data["stop"]
-        response_text = requests.get(self.endpoints["event"], data=stop_data, headers=headers).text
+        response_text = requests.get(self.endpoints["event"], data=stop_data, headers=header_data).text
 
         _logger.debug("Response from pump: %s", response_text)
 
@@ -127,7 +127,7 @@ class ShimadzuCbm20(object):
         pump_parameter_name = set_parameters[name][2]
 
         set_data = request_data[request_data_name] % {"name": pump_parameter_name, "value": value}
-        response_text = requests.get(self.endpoints[endpoint_name], data=set_data, headers=headers).text
+        response_text = requests.get(self.endpoints[endpoint_name], data=set_data, headers=header_data).text
 
         _logger.debug("Response from pump: %s", response_text)
 
@@ -153,7 +153,7 @@ class ShimadzuCbm20(object):
                              (name, request_data_name))
 
         get_data = request_data[request_data_name]
-        response_text = requests.get(self.endpoints[endpoint_name], data=get_data, headers=headers).text
+        response_text = requests.get(self.endpoints[endpoint_name], data=get_data, headers=header_data).text
 
         _logger.debug("Response from pump: %s", response_text)
 
