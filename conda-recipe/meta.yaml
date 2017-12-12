@@ -1,6 +1,6 @@
 package:
     name: shimadzu_pump
-    version: 0.0.3
+    version: 1.0.0
 
 build:
   number: 0
