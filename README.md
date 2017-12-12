@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/paulscherrerinstitute/shimadzu_pump.svg?branch=master)](https://travis-ci.org/paulscherrerinstitute/shimadzu_pump)
+
 # Shimadzu CBM20 pump IOC
 IOC for controlling a single Shimadzu CBM20 pump. The library assumes that only 1 pump exists 
 at the connection hostname.
