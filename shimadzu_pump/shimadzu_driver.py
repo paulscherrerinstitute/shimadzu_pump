@@ -48,7 +48,7 @@ class ShimadzuCbm20(object):
 
         self.host = host
 
-        _logger.debug("Starting ShimadzuCbm20 driver with exposed get_parameters: %s", get_parameters)
+        _logger.info("Starting ShimadzuCbm20 communication driver with host='%s'", self.host)
 
         self.endpoints = {"login": "http://%s/cgi-bin/Login.cgi" % self.host,
                           "event": "http://%s/cgi-bin/Event.cgi" % self.host,
@@ -74,7 +74,7 @@ class ShimadzuCbm20(object):
         if not session_id:
             raise ValueError("You are already logged in. Please logout first.")
 
-        _logger.info("Logged in as '%s'.", user)
+        _logger.info("Logged in as '%s' successful.", user)
 
         return session_id
 
@@ -135,6 +135,8 @@ class ShimadzuCbm20(object):
 
     def get(self, name):
 
+        _logger.debug("Getting parameter '%s'.", name)
+
         if name not in get_parameters:
             raise ValueError(
                 "Parameter name '%s' not recognized. Available get_parameters: %s" % (
@@ -153,9 +155,13 @@ class ShimadzuCbm20(object):
         get_data = request_data[request_data_name]
         response_text = requests.get(self.endpoints[endpoint_name], data=get_data, headers=headers).text
 
+        _logger.debug("Response from pump: %s", response_text)
+
         return extract_element(get_parameters[name], response_text)
 
     def get_all(self):
+
+        _logger.debug("Getting all parameters.")
 
         data = {}
 
