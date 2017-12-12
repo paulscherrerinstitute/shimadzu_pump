@@ -33,12 +33,12 @@ pvdb = {
         "prec": 4
     },
 
-    "PRESSURE_MAX": {
+    "PRESSURE_MIN_SP": {
         "type": "float",
         "prec": 4
     },
 
-    "PRESSURE_MIN_SP": {
+    "PRESSURE_MAX": {
         "type": "float",
         "prec": 4
     },
