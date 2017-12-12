@@ -16,7 +16,7 @@ def main(pump_host, ioc_prefix, pump_polling_interval):
     server = SimpleServer()
     server.createPV(prefix=ioc_prefix, pvdb=ioc.pvdb)
 
-    communication_driver = ShimadzuCbm20(pump_host=pump_host)
+    communication_driver = ShimadzuCbm20(host=pump_host)
     driver = ioc.EpicsShimadzuPumpDriver(communication_driver=communication_driver,
                                          pump_polling_interval=pump_polling_interval)
 
