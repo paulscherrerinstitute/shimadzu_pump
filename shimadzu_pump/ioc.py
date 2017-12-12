@@ -3,7 +3,6 @@ from time import sleep
 
 from pcaspy import Driver
 import logging
-from shimadzu_pump.shimadzu_driver import ShimadzuCbm20
 
 _logger = logging.getLogger("SchimadzuDriver")
 
@@ -65,14 +64,12 @@ properties_to_poll = {
 
 class EpicsShimadzuPumpDriver(Driver):
 
-    def __init__(self, pump_host, pump_polling_interval):
+    def __init__(self, communication_driver, pump_polling_interval):
         Driver.__init__(self)
-        _logger.info("Starting communication driver with pump_host '%s' and polling interval '%s' seconds.",
-                     pump_host, pump_polling_interval)
+        _logger.info("Starting epics driver with polling interval '%s' seconds.", pump_polling_interval)
 
+        self.communication_driver = communication_driver
         self.pump_polling_interval = pump_polling_interval
-
-        self.communication_driver = ShimadzuCbm20(pump_host)
 
         # Login to the pump.
         self.communication_driver.login()

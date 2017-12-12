@@ -5,6 +5,7 @@ import sys
 
 from pcaspy import SimpleServer
 from shimadzu_pump import ioc
+from shimadzu_pump.shimadzu_driver import ShimadzuCbm20
 
 
 def main(pump_host, ioc_prefix, pump_polling_interval):
@@ -14,7 +15,10 @@ def main(pump_host, ioc_prefix, pump_polling_interval):
 
     server = SimpleServer()
     server.createPV(prefix=ioc_prefix, pvdb=ioc.pvdb)
-    driver = ioc.EpicsShimadzuPumpDriver(pump_host=pump_host, pump_polling_interval=pump_polling_interval)
+
+    communication_driver = ShimadzuCbm20(pump_host=pump_host)
+    driver = ioc.EpicsShimadzuPumpDriver(communication_driver=communication_driver,
+                                         pump_polling_interval=pump_polling_interval)
 
     try:
 
