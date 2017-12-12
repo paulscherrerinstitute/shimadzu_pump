@@ -64,11 +64,9 @@ class ShimadzuCbm20(object):
         login_data = request_data["login"] % (user, password)
 
         response_text = requests.get(self.endpoints["login"], data=login_data, headers=header_data).text
-
         _logger.debug("Response from pump: %s", response_text)
 
         session_id = extract_element((None, None, "Certification/SessionID", str), response_text)
-
         _logger.debug("Received session_id='%s'.", session_id)
 
         if not session_id:
