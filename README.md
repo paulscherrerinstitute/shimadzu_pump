@@ -7,13 +7,13 @@ at the connection hostname.
 ## Available PVs
 
 - \[IOC_PREFIX\] PUMPING (Read back value of the pump status)
-- \[IOC_PREFIX\] PUMPING-SET (Set point for starting (write 1) or stopping (write 0) the pump)
+- \[IOC_PREFIX\] PUMPING_SP (Set point for starting (write 1) or stopping (write 0) the pump)
 - \[IOC_PREFIX\] FLOW (Read back value of the pump flow)
-- \[IOC_PREFIX\] FLOW-SET (Set point for the pump flow)
-- \[IOC_PREFIX\] MIN-PRESSURE (Read back value of the pump min pressure setting)
-- \[IOC_PREFIX\] MIN-PRESSURE-SET (Set point for the pump min pressure setting)
-- \[IOC_PREFIX\] MAX-PRESSURE (Read back value of the pump max pressure setting)
-- \[IOC_PREFIX\] MAX-PRESSURE-SET (Set point for the pump max pressure setting)
+- \[IOC_PREFIX\] FLOW_SP (Set point for the pump flow)
+- \[IOC_PREFIX\] PRESSURE_MIN (Read back value of the pump min pressure setting)
+- \[IOC_PREFIX\] PRESSURE_MIN_SP (Set point for the pump min pressure setting)
+- \[IOC_PREFIX\] PRESSURE_MAX (Read back value of the pump max pressure setting)
+- \[IOC_PREFIX\] PRESSURE_MAX_SP (Set point for the pump max pressure setting)
 
 ## Quick start guide
 ```bash
@@ -97,3 +97,14 @@ python schimadzu_pump/run.py IOC_PREFIX PUMP_HOSTNAME
 ```
 
 **WARNING**: You need to make sure that all the requirements mentioned in the **Requirements** section are installed.
+
+## Testing IOC without pump
+If you do not have the pump, but would like to run the ioc for creating screens (for example) you need to 
+run the following commands in the root folder of this repo:
+
+```bash
+export PYTHONPATH="${PYTHONPATH}:$(pwd)"
+python tests/test_ioc.py PUMP_TEST: --log_level=DEBUG
+```
+
+This will create an IOC with a simulated pump that is functionally equal to the production one.
