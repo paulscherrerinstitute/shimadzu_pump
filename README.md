@@ -1,5 +1,6 @@
 # Shimadzu CBM20 pump IOC
-Just a Shimadzu pump controller.
+IOC for controlling a single Shimadzu CBM20 pump. The library assumes that only 1 pump exists 
+at the connection hostname.
 
 ## Available PVs
 
@@ -7,10 +8,22 @@ Just a Shimadzu pump controller.
 - \[IOC_PREFIX\] PUMPING-SET (Set point for starting (write 1) or stopping (write 0) the pump)
 - \[IOC_PREFIX\] FLOW (Read back value of the pump flow)
 - \[IOC_PREFIX\] FLOW-SET (Set point for the pump flow)
-- \[IOC_PREFIX\] PRESSURE (Read back value of the pump pressure)
+- \[IOC_PREFIX\] MIN-PRESSURE (Read back value of the pump min pressure setting)
+- \[IOC_PREFIX\] MIN-PRESSURE-SET (Set point for the pump min pressure setting)
+- \[IOC_PREFIX\] MAX-PRESSURE (Read back value of the pump max pressure setting)
+- \[IOC_PREFIX\] MAX-PRESSURE-SET (Set point for the pump max pressure setting)
+
+## Quick start guide
+```bash
+# Install the library
+conda install -c paulscherrerinstitute shimadzu_pump
+
+# Run the IOC
+schimadzu_pump_ioc IOC-PREFIX: PUMP_HOSTNAME.psi.ch
+```
 
 ## Conda setup
-If you use conda, you can create an environment with the mflow_nodes library by running:
+If you use conda, you can create an environment with the shimadzu_pump library by running:
 
 ```bash
 conda create -c paulscherrerinstitute --name <env_name> shimadzu_pump
