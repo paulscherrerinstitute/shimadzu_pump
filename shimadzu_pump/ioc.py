@@ -4,7 +4,7 @@ from time import sleep
 from pcaspy import Driver
 import logging
 
-_logger = logging.getLogger("SchimadzuDriver")
+_logger = logging.getLogger("ShimadzuDriver")
 
 pvdb = {
     "PUMPING": {
@@ -12,7 +12,7 @@ pvdb = {
         'enums': ['OFF', 'ON']
     },
 
-    # This is a special case - do not include it in write_pvname_to_schimatzu_property.
+    # This is a special case - do not include it in write_pvname_to_shimatzu_property.
     "PUMPING_SP": {
         "type": "enum",
         'enums': ['OFF', 'ON']
@@ -50,7 +50,7 @@ pvdb = {
 }
 
 # PV name : Pump property name
-write_pvname_to_schimatzu_property = {
+write_pvname_to_shimatzu_property = {
     "FLOW_SP": "flow",
     "PRESSURE_MIN_SP": "min_pressure",
     "PRESSURE_MAX_SP": "max_pressure"
@@ -114,9 +114,9 @@ class EpicsShimadzuPumpDriver(Driver):
     def write(self, reason, value):
 
         # The PV is a pump parameter.
-        if reason in write_pvname_to_schimatzu_property:
+        if reason in write_pvname_to_shimatzu_property:
 
-            pump_value_name = write_pvname_to_schimatzu_property[reason]
+            pump_value_name = write_pvname_to_shimatzu_property[reason]
 
             try:
 

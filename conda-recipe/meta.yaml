@@ -22,7 +22,7 @@ test:
 
 build:
   entry_points:
-    - schimadzu_pump_ioc = shimadzu_pump.run:main
+    - shimadzu_pump_ioc = shimadzu_pump.run:main
 
 about:
     summary: "Just a Shimadzu pump controller."
