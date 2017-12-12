@@ -9,6 +9,18 @@ from shimadzu_pump.shimadzu_driver import ShimadzuCbm20
 
 
 def main(pump_host, ioc_prefix, pump_polling_interval):
+    parser = ArgumentParser()
+    parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC.")
+    parser.add_argument("pump_host", type=str, help="Pump host.")
+    parser.add_argument("--polling_interval", default=1, type=float, help="Pump polling interval.")
+    parser.add_argument("--log_level", default="WARNING",
+                        choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'],
+                        help="Log level to use.")
+
+    arguments = parser.parse_args()
+
+    logging.basicConfig(stream=sys.stdout, level=arguments.log_level)
+
     _logger = logging.getLogger(ioc_prefix)
     _logger.info("Starting ioc with prefix '%s', pump polling interval '%s' seconds, and pump_host '%s'.",
                  ioc_prefix, pump_polling_interval, pump_host)
@@ -30,18 +42,4 @@ def main(pump_host, ioc_prefix, pump_polling_interval):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC.")
-    parser.add_argument("pump_host", type=str, help="Pump host.")
-    parser.add_argument("--polling_interval", default=1, type=float, help="Pump polling interval.")
-    parser.add_argument("--log_level", default="WARNING",
-                        choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'],
-                        help="Log level to use.")
-
-    arguments = parser.parse_args()
-
-    logging.basicConfig(stream=sys.stdout, level=arguments.log_level)
-
-    main(ioc_prefix=arguments.ioc_prefix,
-         pump_host=arguments.pump_host,
-         pump_polling_interval=arguments.polling_interval)
+    main()
