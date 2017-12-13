@@ -21,7 +21,7 @@ at the connection hostname.
 conda install -c paulscherrerinstitute shimadzu_pump
 
 # Run the IOC
-schimadzu_pump_ioc IOC-PREFIX: PUMP_HOSTNAME.psi.ch
+shimadzu_pump_ioc IOC-PREFIX: PUMP_HOSTNAME.psi.ch
 ```
 
 ## Conda setup
@@ -60,17 +60,17 @@ your conda config:
 conda config --add channels paulscherrerinstitute
 ```
 
-## RUN the IOC
+## Run the IOC
 
 Executable help:
 
 ```bash
-usage: schimadzu_pump_ioc [-h] [--polling_interval POLLING_INTERVAL]
-              [--log_level {CRITICAL,ERROR,WARNING,INFO,DEBUG}]
-              ioc_prefix pump_host
+usage: shimadzu_pump_ioc [-h] [--polling_interval POLLING_INTERVAL]
+                         [--log_level {CRITICAL,ERROR,WARNING,INFO,DEBUG}]
+                         ioc_prefix pump_host
 
 positional arguments:
-  ioc_prefix            Prefix of the IOC.
+  ioc_prefix            Prefix ofs the IOC.
   pump_host             Pump host.
 
 optional arguments:
@@ -85,7 +85,7 @@ optional arguments:
 To run the IOC, first install the conda package, and then execute:
 ```bash
 # Run the IOC with the specified prefix.
-schimadzu_pump_ioc IOC_PREFIX PUMP_HOSTNAME
+shimadzu_pump_ioc IOC_PREFIX PUMP_HOSTNAME
 ```
 
 ### Manual installation
@@ -93,12 +93,12 @@ If you are not installing the conda package, you need to set this repo into your
 From the root of this repo run:
 ```bash
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
-python schimadzu_pump/run.py IOC_PREFIX PUMP_HOSTNAME
+python shimadzu_pump/run.py IOC_PREFIX PUMP_HOSTNAME
 ```
 
 **WARNING**: You need to make sure that all the requirements mentioned in the **Requirements** section are installed.
 
-## Testing IOC without pump
+## Testing IOC (simulated pump)
 If you do not have the pump, but would like to run the ioc for creating screens (for example) you need to 
 run the following commands in the root folder of this repo:
 
