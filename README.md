@@ -4,6 +4,10 @@
 IOC for controlling a single Shimadzu CBM20 pump. The library assumes that only 1 pump exists 
 at the connection hostname.
 
+## Note on web interface
+The web interface only works with Internet Explorer (not Edge).  If you are using a version newer than IE7 you will need to add the IP address/hostname of the Shimadzu to the "Compatibility View Settings" list by using the settings gear on the upper right corner.
+Default IP address (w/o DHCP) is 192.168.200.99
+
 ## Available PVs
 
 - \[IOC_PREFIX\] PUMPING (Read back value of the pump status)
