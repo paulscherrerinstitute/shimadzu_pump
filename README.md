@@ -10,6 +10,7 @@ at the connection hostname.
 - \[IOC_PREFIX\] PUMPING_SP (Set point for starting (write 1) or stopping (write 0) the pump)
 - \[IOC_PREFIX\] FLOW (Read back value of the pump flow)
 - \[IOC_PREFIX\] FLOW_SP (Set point for the pump flow)
+- \[IOC_PREFIX\] PRESSURE (Read back value of the pump pressure)
 - \[IOC_PREFIX\] PRESSURE_MIN (Read back value of the pump min pressure setting)
 - \[IOC_PREFIX\] PRESSURE_MIN_SP (Set point for the pump min pressure setting)
 - \[IOC_PREFIX\] PRESSURE_MAX (Read back value of the pump max pressure setting)
