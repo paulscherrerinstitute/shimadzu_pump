@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 get_parameters = {"flow": ("method", "get_method", "Pumps/Pump/Usual/Flow", float),
                   "max_pressure": ("method", "get_method", "Pumps/Pump/Usual/Pmax", float),
                   "min_pressure": ("method", "get_method", "Pumps/Pump/Detail/Pmin", float),
+                  "pressure": ("method", "get_method", "Pumps/Pump/Detail/Press", float),
                   "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int)}
 
 set_parameters = {"flow": ("method", "set_usual", "Flow"),
