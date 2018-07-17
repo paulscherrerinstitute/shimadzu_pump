@@ -22,12 +22,12 @@ Default IP address (w/o DHCP) is 192.168.200.99
 - \[IOC_PREFIX\] EVENT (Read back value of the pump relay outputs setting)
 - \[IOC_PREFIX\] EVENT_SET (Requested relay outputs - see note/table below)
 
-- Note for 'event' to control the relay outputs, they need to be set
-to 'event' mode.  'EVENT_SET' takes the following syntax: 
-Both off: 00
+#### Note for 'event' to control the relay outputs, they need to be set to 'event' mode. 'EVENT_SET' takes the following syntax: 
+```Both off: 00
 1 on, 2 off: 1
 2 on, one off: 2
 Both 1 and 2 on: 12
+```
 
 ## Quick start guide
 ```bash
