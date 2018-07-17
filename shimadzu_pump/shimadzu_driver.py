@@ -9,11 +9,15 @@ get_parameters = {"flow": ("method", "get_method", "Pumps/Pump/Usual/Flow", floa
                   "max_pressure": ("method", "get_method", "Pumps/Pump/Usual/Pmax", float),
                   "min_pressure": ("method", "get_method", "Pumps/Pump/Detail/Pmin", float),
                   "pressure": ("method", "get_method", "Pumps/Pump/Detail/Press", float),
-                  "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int)}
+                  "event":   ("method", "get_method", "Ctrl/Usual/Eventset", int),
+                  "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int)
+}
 
-set_parameters = {"flow": ("method", "set_usual", "Flow"),
-                  "min_pressure": ("method", "set_detail", "Pmin"),
-                  "max_pressure": ("method", "set_usual", "Pmax")}
+set_parameters = {"flow": ("method", "set_pump_usual", "Flow"),
+                  "min_pressure": ("method", "set_pump_detail", "Pmin"),
+                  "max_pressure": ("method", "set_pump_usual", "Pmax"),
+                  "event_set": ("method", "set_ctrl_usual", "Eventset")
+}
 
 header_data = {'Content-Type': 'text'}
 
@@ -23,12 +27,13 @@ request_data = {
     "logout": "<Login><Mode>-1</Mode></Login>",
     "start": "<Event><Method><PumpBT>1</PumpBT></Method></Event>",
     "stop": "<Event><Method><PumpBT>0</PumpBT></Method></Event>",
-    "get_method": "<Method><No>0</No><Pumps></Pumps></Method>",
+    "get_method": "<Method><No>0</No><Pumps></Pumps><Ctrl></Ctrl></Method>",
     "get_monitor": "<Monitor><Config><Situation><Pumps></Pumps></Situation></Config></Monitor>",
-    "set_usual": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Usual><%(name)s>%(value).4f</%(name)s></Usual>"
+    "set_pump_usual": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Usual><%(name)s>%(value).4f</%(name)s></Usual>"
                  "</Pump></Pumps></Method>",
-    "set_detail": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Detail><%(name)s>%(value).4f</%(name)s></Detail>"
-                 "</Pump></Pumps></Method>"
+    "set_pump_detail": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Detail><%(name)s>%(value).4f</%(name)s></Detail>"
+                 "</Pump></Pumps></Method>",
+    "set_ctrl_usual": "<Method><No>0</No><Ctrl><Usual><%(name)s>%(value)d</%(name)s></Usual></Ctrl></Method>"
 }
 
 

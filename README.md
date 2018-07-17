@@ -19,6 +19,15 @@ Default IP address (w/o DHCP) is 192.168.200.99
 - \[IOC_PREFIX\] PRESSURE_MIN_SP (Set point for the pump min pressure setting)
 - \[IOC_PREFIX\] PRESSURE_MAX (Read back value of the pump max pressure setting)
 - \[IOC_PREFIX\] PRESSURE_MAX_SP (Set point for the pump max pressure setting)
+- \[IOC_PREFIX\] EVENT (Read back value of the pump relay outputs setting)
+- \[IOC_PREFIX\] EVENT_SET (Requested relay outputs - see note/table below)
+
+- Note for 'event' to control the relay outputs, they need to be set
+to 'event' mode.  'EVENT_SET' takes the following syntax: 
+Both off: 00
+1 on, 2 off: 1
+2 on, one off: 2
+Both 1 and 2 on: 12
 
 ## Quick start guide
 ```bash
@@ -75,7 +84,7 @@ usage: shimadzu_pump_ioc [-h] [--polling_interval POLLING_INTERVAL]
                          ioc_prefix pump_host
 
 positional arguments:
-  ioc_prefix            Prefix ofs the IOC.
+  ioc_prefix            Prefix of the IOC (include seperator).
   pump_host             Pump host.
 
 optional arguments:
@@ -90,15 +99,15 @@ optional arguments:
 To run the IOC, first install the conda package, and then execute:
 ```bash
 # Run the IOC with the specified prefix.
-shimadzu_pump_ioc IOC_PREFIX PUMP_HOSTNAME
+shimadzu_pump_ioc IOC_PREFIX: PUMP_HOSTNAME
 ```
-
+  
 ### Manual installation
 If you are not installing the conda package, you need to set this repo into your Python path. 
 From the root of this repo run:
 ```bash
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
-python shimadzu_pump/run.py IOC_PREFIX PUMP_HOSTNAME
+python shimadzu_pump/run.py IOC_PREFIX: PUMP_HOSTNAME
 ```
 
 **WARNING**: You need to make sure that all the requirements mentioned in the **Requirements** section are installed.

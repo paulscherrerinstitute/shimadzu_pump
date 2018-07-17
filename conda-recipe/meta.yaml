@@ -1,6 +1,6 @@
 package:
     name: shimadzu_pump
-    version: 1.0.0
+    version: 1.1.0
 
 build:
   number: 0
@@ -15,10 +15,6 @@ requirements:
         - python
         - requests
         - pcaspy
-
-test:
-  source_files:
-    - tests/
 
 build:
   entry_points:

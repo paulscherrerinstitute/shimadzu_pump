@@ -52,13 +52,22 @@ pvdb = {
         "type": "float",
         "prec": 4
     },
+
+    "EVENT": {
+        "type": "int",
+    },
+
+    "EVENT_SET": {
+        "type": "int",
+    }
 }
 
 # PV name : Pump property name
 write_pvname_to_shimatzu_property = {
     "FLOW_SP": "flow",
     "PRESSURE_MIN_SP": "min_pressure",
-    "PRESSURE_MAX_SP": "max_pressure"
+    "PRESSURE_MAX_SP": "max_pressure",
+    "EVENT_SET": "event_set"
 }
 
 # Pump property name : PV name
@@ -67,7 +76,8 @@ properties_to_poll = {
     "pressure": "PRESSURE",
     "min_pressure": "PRESSURE_MIN",
     "max_pressure": "PRESSURE_MAX",
-    "pumping": "PUMPING"
+    "pumping": "PUMPING",
+    "event": "EVENT"
 }
 
 
