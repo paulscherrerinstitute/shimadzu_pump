@@ -6,12 +6,12 @@ matrix:
   include:
     - os: linux
       env: CONDA_PY=3.5
-    - os: linux
-      env: CONDA_PY=3.6
+#    - os: linux
+#      env: CONDA_PY=3.6
     - os: osx
       env: CONDA_PY=3.5
-    - os: osx
-      env: CONDA_PY=3.6
+#    - os: osx
+#      env: CONDA_PY=3.6
 
 install:
   # Set the anaconda environment
@@ -44,6 +44,6 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: anaconda -t $CONDA_TOKEN upload $HOME/miniconda/conda-bld/**/*.tar.bz2
+  script: anaconda -t $CONDA_TOKEN upload $HOME/miniconda/conda-bld/**/shimadzu_pump-1.1.4-py35_0.tar.bz2
   on:
     tags: true
