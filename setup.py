@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='shimadzu_pump',
-    version="1.1.6",
+    version="1.1.7",
     description="Just a Shimadzu pump controller.",
     author='Paul Scherrer Institute',
     author_email='scott.stubbs@psi.ch',
