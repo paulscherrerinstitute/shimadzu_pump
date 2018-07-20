@@ -9,14 +9,17 @@ get_parameters = {"flow": ("method", "get_method", "Pumps/Pump/Usual/Flow", floa
                   "max_pressure": ("method", "get_method", "Pumps/Pump/Usual/Pmax", float),
                   "min_pressure": ("method", "get_method", "Pumps/Pump/Detail/Pmin", float),
                   "pressure": ("method", "get_method", "Pumps/Pump/Detail/Press", float),
+                  "pressure_unit": ("config", "get_config", "Pumps/Pump/PressUnit", int),
                   "event":   ("method", "get_method", "Ctrl/Usual/Eventset", int),
-                  "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int)
+                  "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int),
+                  "clear_error": ("event", "get_event", "Error/Clear", int)
 }
 
 set_parameters = {"flow": ("method", "set_pump_usual", "Flow"),
                   "min_pressure": ("method", "set_pump_detail", "Pmin"),
                   "max_pressure": ("method", "set_pump_usual", "Pmax"),
-                  "event_set": ("method", "set_ctrl_usual", "Eventset")
+                  "event": ("method", "set_ctrl_usual", "Eventset"),
+                  "clear_error": ("event", "set_event_error", "Clear")
 }
 
 header_data = {'Content-Type': 'text'}
@@ -24,16 +27,19 @@ header_data = {'Content-Type': 'text'}
 request_data = {
     "login": "<Login><Mode>0</Mode><Certification><UserID>%s</UserID><Password>%s</Password>"
              "<SessionID/><Result/></Certification></Login>",
-    "logout": "<Login><Mode>-1</Mode></Login>",
+    "logout":"<Login><Mode>-1</Mode></Login>",
     "start": "<Event><Method><PumpBT>1</PumpBT></Method></Event>",
     "stop": "<Event><Method><PumpBT>0</PumpBT></Method></Event>",
-    "get_method": "<Method><No>0</No><Pumps></Pumps><Ctrl></Ctrl></Method>",
+    "get_method":  "<Method><No>0</No><Pumps></Pumps><Ctrl></Ctrl></Method>",
     "get_monitor": "<Monitor><Config><Situation><Pumps></Pumps></Situation></Config></Monitor>",
+    "get_config": "<Config><Env><Pumps></Pumps></Env></Config>",
+    "get_event": "<Event></Event>",
     "set_pump_usual": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Usual><%(name)s>%(value).4f</%(name)s></Usual>"
                  "</Pump></Pumps></Method>",
     "set_pump_detail": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Detail><%(name)s>%(value).4f</%(name)s></Detail>"
                  "</Pump></Pumps></Method>",
-    "set_ctrl_usual": "<Method><No>0</No><Ctrl><Usual><%(name)s>%(value)d</%(name)s></Usual></Ctrl></Method>"
+    "set_ctrl_usual": "<Method><No>0</No><Ctrl><Usual><%(name)s>%(value)d</%(name)s></Usual></Ctrl></Method>",
+    "set_event_error": "<Event><Error><%(name)s>%(value)d</%(name)s></Error></Event>"
 }
 
 
@@ -59,7 +65,8 @@ class ShimadzuCbm20(object):
         self.endpoints = {"login": "http://%s/cgi-bin/Login.cgi" % self.host,
                           "event": "http://%s/cgi-bin/Event.cgi" % self.host,
                           "method": "http://%s/cgi-bin/Method.cgi" % self.host,
-                          "monitor": "http://%s/cgi-bin/Monitor.cgi" % self.host}
+                          "monitor": "http://%s/cgi-bin/Monitor.cgi" % self.host,
+                          "config": "http://%s/cgi-bin/Config.cgi" % self.host}
 
     def login(self, user="Admin", password="Admin"):
 

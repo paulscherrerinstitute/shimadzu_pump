@@ -14,15 +14,17 @@ Default IP address (w/o DHCP) is 192.168.200.99
 - \[IOC_PREFIX\] PUMPING_SP (Set point for starting (write 1) or stopping (write 0) the pump)
 - \[IOC_PREFIX\] FLOW (Read back value of the pump flow)
 - \[IOC_PREFIX\] FLOW_SP (Set point for the pump flow)
+- \[IOC_PREFIX\] CLEAR_ERROR (Used to clear error - write '0' to do so)
 - \[IOC_PREFIX\] PRESSURE (Read back value of the pump pressure)
 - \[IOC_PREFIX\] PRESSURE_MIN (Read back value of the pump min pressure setting)
 - \[IOC_PREFIX\] PRESSURE_MIN_SP (Set point for the pump min pressure setting)
 - \[IOC_PREFIX\] PRESSURE_MAX (Read back value of the pump max pressure setting)
 - \[IOC_PREFIX\] PRESSURE_MAX_SP (Set point for the pump max pressure setting)
+- \[IOC_PREFIX\] PRESSURE_UNIT (Read back value of current pressure unit for remote ops)
 - \[IOC_PREFIX\] EVENT (Read back value of the pump relay outputs setting)
 - \[IOC_PREFIX\] EVENT_SET (Requested relay outputs - see note/table below)
 
-#### Note for 'event' to control the relay outputs, they need to be set to 'event' mode. 'EVENT_SET' takes the following syntax: 
+#### Note for 'event' to control the relay outputs, they need to be set to 'event' mode.  Also these are only for the outputs on the remote module! 'EVENT_SET' takes the following syntax: 
 ```
 Both off: 0
 1 on, 2 off: 1

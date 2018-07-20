@@ -54,11 +54,20 @@ pvdb = {
     },
 
     "EVENT": {
-        "type": "int",
+        "type": "int"
     },
 
     "EVENT_SET": {
-        "type": "int",
+        "type": "int"
+    },
+   #special case - do not include in poll parameters
+    "CLEAR_ERROR": {
+        "type": "int"
+    },
+
+    "PRESSURE_UNIT":{
+        "type": "enum",
+        'enums': ['MPa','kgf/cm2','psi','bar']
     }
 }
 
@@ -67,7 +76,8 @@ write_pvname_to_shimatzu_property = {
     "FLOW_SP": "flow",
     "PRESSURE_MIN_SP": "min_pressure",
     "PRESSURE_MAX_SP": "max_pressure",
-    "EVENT_SET": "event_set"
+    "EVENT_SET": "event",
+    "CLEAR_ERROR": "clear_error"
 }
 
 # Pump property name : PV name
@@ -77,7 +87,8 @@ properties_to_poll = {
     "min_pressure": "PRESSURE_MIN",
     "max_pressure": "PRESSURE_MAX",
     "pumping": "PUMPING",
-    "event": "EVENT"
+    "event": "EVENT",
+    "pressure_unit": "PRESSURE_UNIT"
 }
 
 
