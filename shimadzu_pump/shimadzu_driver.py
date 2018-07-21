@@ -85,7 +85,7 @@ class ShimadzuCbm20(object):
         if not session_id:
             raise ValueError("You are already logged in. Please logout first.")
 
-        _logger.info("Logged in as '%s' successful.", user)
+        _logger.info("Logging in as '%s' was successful.", user)
 
         return session_id
 

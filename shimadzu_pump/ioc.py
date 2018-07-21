@@ -65,7 +65,7 @@ pvdb = {
         "type": "int"
     },
 
-    "PRESSURE_UNIT":{
+    "PRESSURE_UNIT": {
         "type": "enum",
         'enums': ['MPa','kgf/cm2','psi','bar']
     }
