@@ -13,6 +13,7 @@ class MockShimadzuCbm20(object):
                      "max_pressure": 100,
                      "min_pressure": 0,
                      "pressure": 0.0,
+                     "pressure_unit": 3,
                      "pumping": 0}
 
     def login(self, user="Admin", password="Admin"):
