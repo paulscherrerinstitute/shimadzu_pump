@@ -62,7 +62,8 @@ pvdb = {
     },
    #special case - do not include in poll parameters
     "CLEAR_ERROR": {
-        "type": "int"
+        "type": "enum",
+        'enums': ['Clear','Not clear']
     },
 
     "PRESSURE_UNIT": {
