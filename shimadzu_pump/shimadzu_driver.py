@@ -9,9 +9,10 @@ get_parameters = {"flow": ("method", "get_method", "Pumps/Pump/Usual/Flow", floa
                   "max_pressure": ("method", "get_method", "Pumps/Pump/Usual/Pmax", float),
                   "min_pressure": ("method", "get_method", "Pumps/Pump/Detail/Pmin", float),
                   "pressure": ("method", "get_method", "Pumps/Pump/Detail/Press", float),
-                  "pressure_unit": ("config", "get_config", "Pumps/Pump/PressUnit", int),
+                  "pressure_unit": ("config", "get_config", "Env/Pumps/Pump/PressUnit", int),
                   "event":   ("method", "get_method", "Ctrl/Usual/Eventset", int),
                   "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int),
+                  #Error is special, don't include in 'get_all'
                   "clear_error": ("event", "get_event", "Error/Clear", int)
 }
 
@@ -167,6 +168,7 @@ class ShimadzuCbm20(object):
 
         data = {}
         for parameter_name in get_parameters.keys():
-            data[parameter_name] = self.get(parameter_name)
+            if parameter_name is not "clear_error":
+                data[parameter_name] = self.get(parameter_name)
 
         return data
