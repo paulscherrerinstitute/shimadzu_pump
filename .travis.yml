@@ -44,6 +44,6 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: anaconda --show-traceback -t $CONDA_TOKEN upload $HOME/miniconda/conda-bld/$TRAVIS_OS_NAME-64/*.tar.bz2
+  script: anaconda -t $CONDA_TOKEN upload $HOME/miniconda/conda-bld/**/*.tar.bz2
   on:
     tags: true
