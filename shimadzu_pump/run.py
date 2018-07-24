@@ -10,7 +10,7 @@ from shimadzu_pump.shimadzu_driver import ShimadzuCbm20
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC.")
+    parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC, include seperator.")
     parser.add_argument("pump_host", type=str, help="Pump host.")
     parser.add_argument("--polling_interval", default=1, type=float, help="Pump polling interval.")
     parser.add_argument("--log_level", default="WARNING",
