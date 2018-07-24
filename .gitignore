@@ -138,3 +138,4 @@ ENV/
 # Ignore all temporary files
 temp_*
 ignore_*
+launch_script.sh
