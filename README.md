@@ -86,6 +86,8 @@ usage: shimadzu_pump_ioc [-h] [--polling_interval POLLING_INTERVAL]
                          [--log_level {CRITICAL,ERROR,WARNING,INFO,DEBUG}]
                          ioc_prefix pump_host
 
+Shimadzu HPLC IOC version (version)
+
 positional arguments:
   ioc_prefix            Prefix of the IOC (include seperator).
   pump_host             Pump host.
