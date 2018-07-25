@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-setup(
-    name='shimadzu_pump',
-    version="1.2.2",
-    description="Just a Shimadzu pump controller.",
-    author='Paul Scherrer Institute',
-    author_email='scott.stubbs@psi.ch',
-    requires=['requests'],
+exec(open("version.py").read())
 
-    packages=['shimadzu_pump']
+setup(
+    name=__name__,
+    version=__version__,
+    description=__description__,
+    author=__author__,
+    author_email=__author_email__,
+    requires=__requires__,
+    packages=__packages__
 )
