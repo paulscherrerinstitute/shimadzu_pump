@@ -3,6 +3,7 @@ from time import sleep
 
 from pcaspy import Driver
 import logging
+from requests import exceptions
 
 _logger = logging.getLogger("ShimadzuDriver")
 
@@ -96,15 +97,22 @@ properties_to_poll = {
 class EpicsShimadzuPumpDriver(Driver):
 
     def __init__(self, communication_driver, pump_polling_interval):
+        connected = False
         Driver.__init__(self)
         _logger.info("Starting epics driver with polling interval '%s' seconds.", pump_polling_interval)
 
         self.communication_driver = communication_driver
         self.pump_polling_interval = pump_polling_interval
 
-        # Login to the pump.
-        self.communication_driver.login()
-
+        # Login to the pump, sleep and retry if not connected.
+        while(not connected):
+            try:
+                self.communication_driver.login()
+                connected = True
+            except exceptions.ConnectionError:
+                _logger.warning("Error connecting to pump, will retry in 30 seconds.")
+                connected = False
+                sleep(30)
         # Start the polling thread.
         self.polling_thread = Thread(target=self.poll_pump)
         self.polling_thread.setDaemon(True)
