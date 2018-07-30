@@ -139,3 +139,4 @@ ENV/
 temp_*
 ignore_*
 launch_script.sh
+pid.txt
