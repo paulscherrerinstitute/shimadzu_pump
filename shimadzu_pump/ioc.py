@@ -123,7 +123,7 @@ class EpicsShimadzuPumpDriver(Driver):
         while True:
 
             try:
-
+                # Poll pump, sleep and retry if not connected.
                 pump_data = self.communication_driver.get_all()
 
                 for pump_property, pv_name in properties_to_poll.items():
@@ -142,8 +142,12 @@ class EpicsShimadzuPumpDriver(Driver):
 
                 self.updatePVs()
 
+            except exceptions.ConnectionError:
+               _logger.warning("Error connecting to pump, will retry in 15s + poll interval.")
+               sleep(15)
+
             except:
-                _logger.exception("Could not read pump properties.")
+                _logger.exception("Connected but could not read pump properties.")
 
             sleep(self.pump_polling_interval)
 
