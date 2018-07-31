@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 get_parameters = {"flow": ("method", "get_method", "Pumps/Pump/Usual/Flow", float),
                   "max_pressure": ("method", "get_method", "Pumps/Pump/Usual/Pmax", float),
                   "min_pressure": ("method", "get_method", "Pumps/Pump/Detail/Pmin", float),
-                  "pressure": ("method", "get_method", "Pumps/Pump/Detail/Press", float),
+                  "pressure": ("sysmon", "get_sysmon", "SysMon/Method/Pumps/Pump/Press", float),
                   "pressure_unit": ("config", "get_config", "Env/Pumps/Pump/PressUnit", int),
                   "event":   ("method", "get_method", "Ctrl/Usual/Eventset", int),
                   "pumping": ("monitor", "get_monitor", "Config/Situation/Pumps/Pump/OpState", int),
@@ -33,6 +33,7 @@ request_data = {
     "stop": "<Event><Method><PumpBT>0</PumpBT></Method></Event>",
     "get_method":  "<Method><No>0</No><Pumps></Pumps><Ctrl></Ctrl></Method>",
     "get_monitor": "<Monitor><Config><Situation><Pumps></Pumps></Situation></Config></Monitor>",
+    "get_sysmon": "<Monitor><SysMon><Method><Pumps><Pump><UnitID>A</UnitID></Pump></Pumps></Method></SysMon></Monitor>",
     "get_config": "<Config><Env><Pumps></Pumps></Env></Config>",
     "get_event": "<Event></Event>",
     "set_pump_usual": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Usual><%(name)s>%(value).4f</%(name)s></Usual>"
@@ -67,7 +68,8 @@ class ShimadzuCbm20(object):
                           "event": "http://%s/cgi-bin/Event.cgi" % self.host,
                           "method": "http://%s/cgi-bin/Method.cgi" % self.host,
                           "monitor": "http://%s/cgi-bin/Monitor.cgi" % self.host,
-                          "config": "http://%s/cgi-bin/Config.cgi" % self.host}
+                          "config": "http://%s/cgi-bin/Config.cgi" % self.host,
+                          "sysmon": "http://%s/cgi-bin/SysMon.cgi" % self.host}
 
     def login(self, user="Admin", password="Admin"):
 
