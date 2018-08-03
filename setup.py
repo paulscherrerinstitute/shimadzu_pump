@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-exec(open("version.py").read())
+exec(open("shimadzu_pump/version.py").read())
 
 setup(
     name=__name__,

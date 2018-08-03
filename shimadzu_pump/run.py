@@ -9,7 +9,7 @@ from shimadzu_pump.shimadzu_driver import ShimadzuCbm20
 
 
 def main():
-    exec(open("version.py").read(), None, globals())
+    exec(open("shimadzu_pump/version.py").read(), None, globals())
     parser = ArgumentParser(description='Shimadzu HPLC IOC version %s' % __version__)
     parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC, include seperator.")
     parser.add_argument("pump_host", type=str, help="Pump host.")
