@@ -119,12 +119,17 @@ class EpicsShimadzuPumpDriver(Driver):
         self.polling_thread.start()
 
     def poll_pump(self):
+        connectionError = False
 
         while True:
 
             try:
                 # Poll pump, sleep and retry if not connected.
+                # However if pump was turned off and back on, we need to log back in first.
+                if connectionError:
+                    self.communication_driver.login()
                 pump_data = self.communication_driver.get_all()
+                connectionError = False
 
                 for pump_property, pv_name in properties_to_poll.items():
 
@@ -144,6 +149,7 @@ class EpicsShimadzuPumpDriver(Driver):
 
             except exceptions.ConnectionError:
                _logger.warning("Error connecting to pump, will retry in 15s + poll interval.")
+               connectionError = True
                sleep(15)
 
             except:
