@@ -154,6 +154,7 @@ class EpicsShimadzuPumpDriver(Driver):
 
             except:
                 _logger.exception("Connected but could not read pump properties.")
+                connectionError = True
 
             sleep(self.pump_polling_interval)
 
