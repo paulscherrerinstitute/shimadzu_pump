@@ -30,7 +30,8 @@ def main():
 
     communication_driver = ShimadzuCbm20(host=arguments.pump_host)
     driver = ioc.EpicsShimadzuPumpDriver(communication_driver=communication_driver,
-                                         pump_polling_interval=arguments.polling_interval)
+                                         pump_polling_interval=arguments.polling_interval,
+                                         hostname=arguments.pump_host)
 
     try:
 

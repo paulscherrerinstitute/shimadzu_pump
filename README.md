@@ -128,3 +128,6 @@ python tests/test_ioc.py PUMP_TEST: --log_level=DEBUG
 ```
 
 This will create an IOC with a simulated pump that is functionally equal to the production one.
+
+### Initial pump setup
+Note CBM setting needs to be set to "internal" if CBM is installed inside Shimadzu pump.

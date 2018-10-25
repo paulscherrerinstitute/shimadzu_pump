@@ -70,8 +70,15 @@ pvdb = {
     "PRESSURE_UNIT": {
         "type": "enum",
         'enums': ['MPa','kgf/cm2','psi','bar']
+    },
+
+    "HOSTNAME": {
+        "type": "string"
     }
 }
+
+# Pump hostname PV
+hostname_PV = "HOSTNAME"
 
 # PV name : Pump property name
 write_pvname_to_shimatzu_property = {
@@ -96,10 +103,12 @@ properties_to_poll = {
 
 class EpicsShimadzuPumpDriver(Driver):
 
-    def __init__(self, communication_driver, pump_polling_interval):
+    def __init__(self, communication_driver, pump_polling_interval, hostname):
         connected = False
         Driver.__init__(self)
         _logger.info("Starting epics driver with polling interval '%s' seconds.", pump_polling_interval)
+
+        super().setParam(hostname_PV, hostname)
 
         self.communication_driver = communication_driver
         self.pump_polling_interval = pump_polling_interval
@@ -195,3 +204,15 @@ class EpicsShimadzuPumpDriver(Driver):
 
             except:
                 _logger.exception("Cannot change the pump status ON to '%s'.", value)
+
+         # The PV is the pump hostname.
+        if reason == "HOSTNAME":
+
+            try:
+
+                _logger.info("Writing hostname PV.")
+                super().setParam(reason, value)
+
+            except:
+
+                _logger.exception("Couldn't write pump hostname to PV?!")
