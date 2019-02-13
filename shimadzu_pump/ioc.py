@@ -86,7 +86,8 @@ write_pvname_to_shimatzu_property = {
     "PRESSURE_MIN_SP": "min_pressure",
     "PRESSURE_MAX_SP": "max_pressure",
     "EVENT_SET": "event",
-    "CLEAR_ERROR": "clear_error"
+    "CLEAR_ERROR": "clear_error",
+    "PRESSURE_UNIT": "pressure_unit"
 }
 
 # Pump property name : PV name

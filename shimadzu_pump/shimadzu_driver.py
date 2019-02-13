@@ -20,7 +20,8 @@ set_parameters = {"flow": ("method", "set_pump_usual", "Flow"),
                   "min_pressure": ("method", "set_pump_detail", "Pmin"),
                   "max_pressure": ("method", "set_pump_usual", "Pmax"),
                   "event": ("method", "set_ctrl_usual", "Eventset"),
-                  "clear_error": ("event", "set_event_error", "Clear")
+                  "clear_error": ("event", "set_event_error", "Clear"),
+                  "pressure_unit": ("config", "set_config", "PressUnit")
 }
 
 header_data = {'Content-Type': 'text'}
@@ -41,7 +42,8 @@ request_data = {
     "set_pump_detail": "<Method><No>0</No><Pumps><Pump><UnitID>A</UnitID><Detail><%(name)s>%(value).4f</%(name)s></Detail>"
                  "</Pump></Pumps></Method>",
     "set_ctrl_usual": "<Method><No>0</No><Ctrl><Usual><%(name)s>%(value)d</%(name)s></Usual></Ctrl></Method>",
-    "set_event_error": "<Event><Error><%(name)s>%(value)d</%(name)s></Error></Event>"
+    "set_event_error": "<Event><Error><%(name)s>%(value)d</%(name)s></Error></Event>",
+    "set_config": "<Config><Env><Pumps><Pump><UnitID>A</UnitID><%(name)s>%(value)d</%(name)s></Pump></Pumps></Env></Config>"
 }
 
 
