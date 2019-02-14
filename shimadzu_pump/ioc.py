@@ -72,6 +72,11 @@ pvdb = {
         'enums': ['MPa','kgf/cm2','psi','bar']
     },
 
+    "PRESSURE_UNIT_SET": {
+        "type": "enum",
+        'enums': ['MPa','kgf/cm2','psi','bar']
+    },
+
     "HOSTNAME": {
         "type": "string"
     }
@@ -87,7 +92,7 @@ write_pvname_to_shimatzu_property = {
     "PRESSURE_MAX_SP": "max_pressure",
     "EVENT_SET": "event",
     "CLEAR_ERROR": "clear_error",
-    "PRESSURE_UNIT": "pressure_unit"
+    "PRESSURE_UNIT_SET": "pressure_unit"
 }
 
 # Pump property name : PV name
