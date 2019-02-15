@@ -21,7 +21,8 @@ Default IP address (w/o DHCP) is 192.168.200.99
 - \[IOC_PREFIX\] PRESSURE_MIN_SP (Set point for the pump min pressure setting)
 - \[IOC_PREFIX\] PRESSURE_MAX (Read back value of the pump max pressure setting)
 - \[IOC_PREFIX\] PRESSURE_MAX_SP (Set point for the pump max pressure setting)
-- \[IOC_PREFIX\] PRESSURE_UNIT (Read back value of current pressure unit for remote ops)
+- \[IOC_PREFIX\] PRESSURE_UNIT (Read back value of the remote ops pressure unit)
+- \[IOC_PREFIX\] PRESSURE_UNIT_SET (Set remote ops pressure unit)
 - \[IOC_PREFIX\] EVENT (Read back value of the pump relay outputs setting)
 - \[IOC_PREFIX\] EVENT_SET (Requested relay outputs - see note/table below)
 
