@@ -40,7 +40,7 @@ Both 1 and 2 on: 12
 conda install -c paulscherrerinstitute shimadzu_pump
 
 # Run the IOC
-shimadzu_pump_ioc IOC-PREFIX: PUMP_HOSTNAME.psi.ch
+shimadzu_pump_ioc IOC-PREFIX: PUMP_HOSTNAME
 ```
 
 ## Conda setup
