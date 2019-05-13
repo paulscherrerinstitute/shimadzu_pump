@@ -8,5 +8,5 @@ description="Just a Shimadzu pump controller.",
 name='shimadzu_pump',
 requires=['requests'],
 packages=['shimadzu_pump'],
-version="1.3.3"
+version="1.3.5"
 )
