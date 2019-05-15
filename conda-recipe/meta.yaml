@@ -21,4 +21,4 @@ build:
     - shimadzu_pump_ioc = shimadzu_pump.run:main
 
 about:
-    summary: "Just a Shimadzu pump controller."
+    summary: "Just a Shimadzu pump controller. Docs at https://github.com/paulscherrerinstitute/shimadzu_pump"
