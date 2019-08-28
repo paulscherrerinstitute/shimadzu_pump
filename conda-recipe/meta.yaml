@@ -5,6 +5,7 @@ package:
 build:
     noarch: python
     number: 0
+    script: python -m pip install --no-deps --ignore-installed .
     entry_points:
       - shimadzu_pump_ioc = shimadzu_pump.run:main
 
@@ -14,6 +15,7 @@ source:
 requirements:
     build:
         - python
+        - pip
     run:
         - python
         - requests
