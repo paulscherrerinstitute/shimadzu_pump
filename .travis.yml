@@ -2,26 +2,9 @@ sudo: false
 
 language: cpp
 
-matrix:
-  include:
-    - os: linux
-      env: CONDA_PY=3.5
-    - os: linux
-      env: CONDA_PY=3.6
-    - os: linux
-      env: CONDA_PY=3.7
-    - os: osx
-      env: CONDA_PY=3.5
-    - os: osx
-      env: CONDA_PY=3.6
-
 install:
   # Set the anaconda environment
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -o miniconda.sh;
-    else
-      curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o miniconda.sh;
-    fi
+  - curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
   - hash -r
@@ -30,7 +13,7 @@ install:
   - conda update -q --all
   - conda install conda-build anaconda-client
   # build
-  - conda build conda-recipe
+  - conda build --no-test -c $MY_CONDA_CHANNEL conda-recipe
 
 script:
   - echo "No test scripts to be run!"
