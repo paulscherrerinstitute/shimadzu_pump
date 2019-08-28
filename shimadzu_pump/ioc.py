@@ -213,12 +213,6 @@ class EpicsShimadzuPumpDriver(Driver):
 
          # The PV is the pump hostname.
         if reason == "HOSTNAME":
+            super().setParam(reason, value)
+            self.updatePVs()
 
-            try:
-
-                _logger.info("Writing hostname PV.")
-                super().setParam(reason, value)
-
-            except:
-
-                _logger.exception("Couldn't write pump hostname to PV?!")
