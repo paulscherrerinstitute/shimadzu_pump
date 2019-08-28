@@ -3,7 +3,10 @@ package:
     version: 1.3.6
 
 build:
-  number: 0
+    noarch: python
+    number: 0
+    entry_points:
+      - shimadzu_pump_ioc = shimadzu_pump.run:main
 
 source:
     path: ..
@@ -15,10 +18,6 @@ requirements:
         - python
         - requests
         - pcaspy
-
-build:
-  entry_points:
-    - shimadzu_pump_ioc = shimadzu_pump.run:main
 
 about:
     summary: "Just a Shimadzu pump controller. Docs at https://github.com/paulscherrerinstitute/shimadzu_pump"

@@ -1,6 +1,6 @@
 sudo: false
 
-language: python
+language: cpp
 
 matrix:
   include:
@@ -16,17 +16,9 @@ matrix:
 install:
   # Set the anaconda environment
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      if [[ "$CONDA_PY" == "2.7" ]]; then
-        curl https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -o miniconda.sh;
-      else
-        curl https://repo.continuum.io/miniconda/Miniconda3-4.6.14-MacOSX-x86_64.sh -o miniconda.sh;
-      fi;
+      curl https://repo.continuum.io/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -o miniconda.sh;
     else
-      if [[ "$CONDA_PY" == "2.7" ]]; then
-        curl https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
-      else
-        wget https://repo.continuum.io/miniconda/Miniconda3-4.6.14-Linux-x86_64.sh -O miniconda.sh;
-      fi
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
