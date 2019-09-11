@@ -8,5 +8,5 @@ description="Just a Shimadzu pump controller. Docs at https://github.com/paulsch
 name='shimadzu_pump',
 requires=['requests'],
 packages=['shimadzu_pump'],
-version="1.3.9"
+version="1.4.0"
 )
