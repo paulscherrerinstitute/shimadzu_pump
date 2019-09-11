@@ -165,11 +165,13 @@ class EpicsShimadzuPumpDriver(Driver):
             except exceptions.ConnectionError:
                _logger.warning("Error connecting to pump, will retry in 15s + poll interval.")
                connectionError = True
+               self.updatePVs()
                sleep(15)
 
             except:
                 _logger.exception("Connected but could not read pump properties.")
                 connectionError = True
+                self.updatePVs()
 
             sleep(self.pump_polling_interval)
 
