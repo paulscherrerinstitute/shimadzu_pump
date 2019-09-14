@@ -43,6 +43,7 @@ crashlytics-build.properties
 fabric.properties
 ### Python template
 # Byte-compiled / optimized / DLL files
+*.pyc
 __pycache__/
 *$py.class
 

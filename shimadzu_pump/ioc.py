@@ -110,7 +110,7 @@ properties_to_poll = {
 class EpicsShimadzuPumpDriver(Driver):
 
     def __init__(self, communication_driver, pump_polling_interval, hostname):
-        connected = False
+        connectionError = True # Also set when pump is not connected
         Driver.__init__(self)
         _logger.info("Starting epics driver with polling interval '%s' seconds.", pump_polling_interval)
 
@@ -118,48 +118,50 @@ class EpicsShimadzuPumpDriver(Driver):
 
         self.communication_driver = communication_driver
         self.pump_polling_interval = pump_polling_interval
-
-        # Login to the pump, sleep and retry if not connected.
-        while(not connected):
-            try:
-                self.communication_driver.login()
-                connected = True
-            except exceptions.ConnectionError:
-                _logger.warning("Error connecting to pump, will retry in 30 seconds.")
-                connected = False
-                sleep(30)
-        # Start the polling thread.
+        # Start login thread.
+        self.login_thread = Thread(target=self.try_connect)
+        self.login_thread.setDaemon(True)
+        self.login_thread.start()
+        # Start the polling and connection check thread.
         self.polling_thread = Thread(target=self.poll_pump)
         self.polling_thread.setDaemon(True)
         self.polling_thread.start()
 
+    # Login to the pump, sleep and retry if not connected.
+    def try_connect():
+        while(connectionError):
+            try:
+                self.communication_driver.login()
+                connectionError=False
+            except exceptions.ConnectionError:
+                _logger.warning("Error connecting to pump, will retry in 30 seconds.")
+                connectionError=True
+        sleep(30)
+
     def poll_pump(self):
-        connectionError = False
 
         while True:
 
             try:
                 # Poll pump, sleep and retry if not connected.
-                # However if pump was turned off and back on, we need to log back in first.
-                if connectionError:
-                    self.communication_driver.login()
-                pump_data = self.communication_driver.get_all()
-                connectionError = False
+                # However if pump was turned off and back on, we need to log back in first via the other thread.
+                if (not connectionError):
+                    pump_data = self.communication_driver.get_all()
 
-                for pump_property, pv_name in properties_to_poll.items():
+                    for pump_property, pv_name in properties_to_poll.items():
 
-                    _logger.debug("Reading pump property '%s'.", pump_property)
+                        _logger.debug("Reading pump property '%s'.", pump_property)
 
-                    if pump_property not in pump_data:
-                        _logger.warning("Pump property '%s' not in received pump data: %s", pump_property, pump_data)
-                        continue
+                        if pump_property not in pump_data:
+                            _logger.warning("Pump property '%s' not in received pump data: %s", pump_property, pump_data)
+                            continue
 
-                    value = pump_data[pump_property]
+                        value = pump_data[pump_property]
 
-                    _logger.debug("Pump property '%s'='%s'", pump_property, value)
+                        _logger.debug("Pump property '%s'='%s'", pump_property, value)
 
-                    super().setParam(pv_name, value)
-
+                        super().setParam(pv_name, value)
+                        self.updatePVs()
                 
 
             except exceptions.ConnectionError:
@@ -171,7 +173,7 @@ class EpicsShimadzuPumpDriver(Driver):
                 _logger.exception("Connected but could not read pump properties.")
                 connectionError = True
 
-            self.updatePVs()
+            server.process(0.1)
             sleep(self.pump_polling_interval)
 
     def write(self, reason, value):
