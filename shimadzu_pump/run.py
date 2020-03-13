@@ -12,7 +12,8 @@ def main():
     parser = ArgumentParser(description='Shimadzu HPLC CBM20 IOC')
     parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC, include seperator.")
     parser.add_argument("pump_host", type=str, help="Pump host.")
-    parser.add_argument("--polling_interval", default=1, type=float, help="Pump polling interval.")
+    parser.add_argument("--polling_interval", default=1, type=float, help="Pump polling interval (s).")
+    parser.add_argument("--retry_interval", default=30, type=float, help="Pump comm retry interval (s).")
     parser.add_argument("--log_level", default="WARNING",
                         choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'],
                         help="Log level to use.")
@@ -22,8 +23,8 @@ def main():
     logging.basicConfig(stream=sys.stdout, level=arguments.log_level)
 
     _logger = logging.getLogger(arguments.ioc_prefix)
-    _logger.info("Starting ioc with prefix '%s', pump polling interval '%s' seconds, and pump_host '%s'.",
-                 arguments.ioc_prefix, arguments.polling_interval, arguments.pump_host)
+    _logger.info("Starting ioc with prefix '%s', pump polling interval '%s' seconds, timeout '%s' seconds, and pump_host '%s'.",
+                 arguments.ioc_prefix, arguments.polling_interval, arguments.retry_interval, arguments.pump_host)
 
     server = SimpleServer()
     server.createPV(prefix=arguments.ioc_prefix, pvdb=ioc.pvdb)
@@ -31,6 +32,7 @@ def main():
     communication_driver = ShimadzuCbm20(host=arguments.pump_host)
     driver = ioc.EpicsShimadzuPumpDriver(communication_driver=communication_driver,
                                          pump_polling_interval=arguments.polling_interval,
+                                         conn_retry_interval=arguments.timeout,
                                          hostname=arguments.pump_host)
 
     try:

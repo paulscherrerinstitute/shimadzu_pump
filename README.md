@@ -2,7 +2,7 @@
 
 # Shimadzu CBM20 pump IOC
 IOC for controlling a single Shimadzu CBM20 pump. The library assumes that only 1 pump exists 
-at the connection hostname.  On startup IOC will try connecting to pump every 30 seconds (with default settings).
+at the connection hostname.  On startup and disconnect IOC will try (re)connecting to pump every 30 seconds (with default settings).
 
 ## Note on web interface
 The web interface only works with Internet Explorer (not Edge).  If you are using a version newer than IE7 you will need to add the IP address/hostname of the Shimadzu to the "Compatibility View Settings" list by using the settings gear on the upper right corner.
@@ -96,7 +96,9 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   --polling_interval POLLING_INTERVAL
-                        Pump polling interval.
+                        Pump polling interval (s).
+  --retry_interval RETRY_INTERVAL
+                        Pump comm retry interval (s).
   --log_level {CRITICAL,ERROR,WARNING,INFO,DEBUG}
                         Log level to use.
 ```

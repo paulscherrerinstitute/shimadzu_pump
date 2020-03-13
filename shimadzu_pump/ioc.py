@@ -109,7 +109,7 @@ properties_to_poll = {
 
 class EpicsShimadzuPumpDriver(Driver):
 
-    def __init__(self, communication_driver, pump_polling_interval, hostname):
+    def __init__(self, communication_driver, pump_polling_interval, conn_retry_interval, hostname):
         connectionError = True # Also set when pump is not connected
         Driver.__init__(self)
         _logger.info("Starting epics driver with polling interval '%s' seconds.", pump_polling_interval)
@@ -118,6 +118,7 @@ class EpicsShimadzuPumpDriver(Driver):
 
         self.communication_driver = communication_driver
         self.pump_polling_interval = pump_polling_interval
+        self.conn_retry_interval = conn_retry_interval
         # Start login thread.
         self.login_thread = Thread(target=self.try_connect)
         self.login_thread.setDaemon(True)
@@ -134,9 +135,9 @@ class EpicsShimadzuPumpDriver(Driver):
                 self.communication_driver.login()
                 connectionError=False
             except exceptions.ConnectionError:
-                _logger.warning("Error connecting to pump, will retry in 30 seconds.")
+                _logger.warning("Error connecting to pump, will retry after %s seconds.", self.conn_retry_interval)
                 connectionError=True
-        sleep(30)
+        sleep(self.conn_retry_interval)
 
     def poll_pump(self):
 
@@ -145,7 +146,7 @@ class EpicsShimadzuPumpDriver(Driver):
             try:
                 # Poll pump, sleep and retry if not connected.
                 # However if pump was turned off and back on, we need to log back in first via the other thread.
-                if (not connectionError):
+                if not connectionError:
                     pump_data = self.communication_driver.get_all()
 
                     for pump_property, pv_name in properties_to_poll.items():
@@ -165,9 +166,8 @@ class EpicsShimadzuPumpDriver(Driver):
                 
 
             except exceptions.ConnectionError:
-               _logger.warning("Error connecting to pump, will retry in 15s + poll interval.")
+               _logger.warning("Error connecting to pump, will retry after poll interval.")
                connectionError = True
-               sleep(15)
 
             except:
                 _logger.exception("Connected but could not read pump properties.")
