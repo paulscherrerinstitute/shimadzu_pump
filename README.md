@@ -131,3 +131,27 @@ This will create an IOC with a simulated pump that is functionally equal to the 
 
 ### Initial pump setup
 Note CBM setting needs to be set to "internal" if CBM is installed inside Shimadzu pump.  This is reached through the System settings.
+
+# TODOs
+
+#TODO: let's make this an ENUM with valve states
+# Valve A | Valve B  | Event val 
+#    0          0	0
+#    1          0	1
+#    0          1	2
+#    1          1	12
+    "EVENT": {
+        "type": "int"
+    },
+
+    "EVENT_SET": {
+        "type": "int"
+    },
+   #special case - do not include in poll parameters
+#TODO: make this a sequence
+    "CLEAR_ERROR": {
+        "type": "enum",
+        'enums': ['Clear','Not clear']
+    },
+
+

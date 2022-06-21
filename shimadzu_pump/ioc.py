@@ -7,6 +7,13 @@ from requests import exceptions
 
 _logger = logging.getLogger("ShimadzuDriver")
 
+valve_dict = { 
+"both_0": 0,
+"first_1": 1,
+"second_1": 2,
+"both_1": 12
+}
+
 pvdb = {
     "PUMPING": {
         "type": "enum",
@@ -54,6 +61,17 @@ pvdb = {
         "prec": 4
     },
 
+#TODO: if this is not implemented in UI- let's make this an ENUM with valve states, needs to be implemented in code
+# Valve A | Valve B  | Event val 
+#    0          0	0
+#    1          0	1
+#    0          1	2
+#    1          1	12
+#    "VALVE_STATE": {
+#        "type": "enum",
+#        'enums': ["both_0", "first_1", "second_1", "both_1"]
+#    },
+
     "EVENT": {
         "type": "int"
     },
@@ -62,19 +80,22 @@ pvdb = {
         "type": "int"
     },
    #special case - do not include in poll parameters
+#TODO: make this a sequence
     "CLEAR_ERROR": {
         "type": "enum",
-        'enums': ['Clear','Not clear']
+        'enums': ['Do not clear','Clear']
     },
 
     "PRESSURE_UNIT": {
         "type": "enum",
-        'enums': ['MPa','kgf/cm2','psi','bar']
+#OLD        'enums': ['MPa','kgf/cm2','psi','bar']
+        'enums': ['kgf/cm2','psi','MPa','bar']
     },
 
     "PRESSURE_UNIT_SET": {
         "type": "enum",
-        'enums': ['MPa','kgf/cm2','psi','bar']
+#OLD        'enums': ['MPa','kgf/cm2','psi','bar']
+        'enums': ['kgf/cm2','psi','MPa','bar']
     },
 
     "HOSTNAME": {
@@ -163,7 +184,6 @@ class EpicsShimadzuPumpDriver(Driver):
                         super().setParam(pv_name, value)
                         self.updatePVs()
                 
-
             except exceptions.ConnectionError:
                _logger.warning("Error connecting to pump, will retry in 15s + poll interval.")
                connectionError = True
@@ -190,6 +210,10 @@ class EpicsShimadzuPumpDriver(Driver):
                 self.communication_driver.set(pump_value_name, value)
 
                 super().setParam(reason, value)
+                # If PV was the error reset request, reset it.
+                if reason == "CLEAR_ERROR":
+                  super().setParam(reason, "Do not clear")
+                   
                 self.updatePVs()
 
             except:
