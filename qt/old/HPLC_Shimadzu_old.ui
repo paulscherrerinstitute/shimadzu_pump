@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
-    <height>477</height>
+    <width>527</width>
+    <height>458</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -270,17 +270,60 @@
      </rect>
     </property>
     <property name="text">
-     <string>Valve Position</string>
+     <string>Events (Relay outputs)</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="caLineEdit" name="calineedit_6">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>220</y>
+      <width>100</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="channel" stdset="0">
+     <string notr="true">$(S):EVENT</string>
+    </property>
+   </widget>
+   <widget class="caTextEntry" name="catextentry_5">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>220</y>
+      <width>100</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="channel" stdset="0">
+     <string notr="true">$(S):EVENT_SET</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>200</y>
+      <width>231</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>HPLC has 2 relay outs. Syntax:
+Both off: 0
+1 on, 2 off: 1
+2 on, 1 off: 2
+Both 1 and 2 on: 12</string>
+    </property>
+   </widget>
    <widget class="caImage" name="caimage">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>280</y>
+      <x>20</x>
+      <y>250</y>
       <width>211</width>
       <height>151</height>
      </rect>
@@ -360,14 +403,14 @@
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>291</x>
-      <y>400</y>
-      <width>141</width>
-      <height>20</height>
+      <x>320</x>
+      <y>390</y>
+      <width>112</width>
+      <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>Network Connection</string>
+     <string>Pump connected</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -377,7 +420,7 @@
     <property name="geometry">
      <rect>
       <x>440</x>
-      <y>392</y>
+      <y>383</y>
       <width>30</width>
       <height>30</height>
      </rect>
@@ -407,7 +450,7 @@
     <property name="geometry">
      <rect>
       <x>340</x>
-      <y>325</y>
+      <y>310</y>
       <width>100</width>
       <height>22</height>
      </rect>
@@ -426,13 +469,10 @@
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>420</y>
+      <y>410</y>
       <width>181</width>
       <height>21</height>
      </rect>
-    </property>
-    <property name="toolTip">
-     <string>If this is showing, software is connected to pump but unable to read properly</string>
     </property>
     <property name="text">
      <string>Warning: Read Error!</string>
@@ -449,38 +489,6 @@
     </property>
     <property name="channel" stdset="0">
      <string notr="true">$(S):READ_OK</string>
-    </property>
-   </widget>
-   <widget class="caImage" name="caimage_2">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>190</y>
-      <width>261</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="filename" stdset="0">
-     <string notr="true">Valvepos.jpg</string>
-    </property>
-   </widget>
-   <widget class="caChoice" name="cachoice">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>220</y>
-      <width>171</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="channel" stdset="0">
-     <string notr="true">$(S):VALVE_STATE</string>
-    </property>
-    <property name="stackingMode" stdset="0">
-     <enum>caChoice::Column</enum>
-    </property>
-    <property name="endBit">
-     <number>1</number>
     </property>
    </widget>
   </widget>

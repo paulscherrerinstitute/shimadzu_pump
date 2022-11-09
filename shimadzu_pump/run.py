@@ -1,3 +1,4 @@
+version = "1.4.2"
 import logging
 from argparse import ArgumentParser
 
@@ -9,7 +10,7 @@ from shimadzu_pump.shimadzu_driver import ShimadzuCbm20
 
 
 def main():
-    parser = ArgumentParser(description='Shimadzu HPLC CBM20 IOC')
+    parser = ArgumentParser(description='Shimadzu HPLC CBM20 IOC v{}'.format(version))
     parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC, include seperator.")
     parser.add_argument("pump_host", type=str, help="Pump host.")
     parser.add_argument("--polling_interval", default=1, type=float, help="Pump polling interval.")

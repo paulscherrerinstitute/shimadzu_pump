@@ -172,7 +172,7 @@ class ShimadzuCbm20(object):
 
         data = {}
         for parameter_name in get_parameters.keys():
-            if parameter_name is not "clear_error":
+            if parameter_name != "clear_error":
                 data[parameter_name] = self.get(parameter_name)
 
         return data

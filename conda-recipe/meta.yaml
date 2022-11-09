@@ -1,8 +1,9 @@
 package:
     name: shimadzu_pump
-    version: 1.4.1
+    version: 1.4.2
 
 build:
+    noarch: python
     number: 0
     entry_points:
       - shimadzu_pump_ioc = shimadzu_pump.run:main
@@ -12,9 +13,9 @@ source:
 
 requirements:
     build:
-        - python
+        - python >=3.8
     run:
-        - python
+        - python >=3.8
         - requests
         - pcaspy
 

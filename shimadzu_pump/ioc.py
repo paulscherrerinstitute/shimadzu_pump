@@ -7,11 +7,11 @@ from requests import exceptions
 
 _logger = logging.getLogger("ShimadzuDriver")
 
-valve_dict = { 
-"both_0": 0,
-"first_1": 1,
-"second_1": 2,
-"both_1": 12
+valve_dict= {
+"Both A+B syringe" : 0,
+"A sample, B syringe": 1,
+"A syringe, B sample": 2,
+"Both A+B sample": 12
 }
 
 pvdb = {
@@ -67,10 +67,10 @@ pvdb = {
 #    1          0	1
 #    0          1	2
 #    1          1	12
-#    "VALVE_STATE": {
-#        "type": "enum",
-#        'enums': ["both_0", "first_1", "second_1", "both_1"]
-#    },
+    "VALVE_STATE": {
+        "type": "enum",
+        'enums': ["Both A+B syringe", "A sample, B syringe", "A syringe, B sample", "Both A+B sample"]
+    },
 
     "EVENT": {
         "type": "int"
@@ -80,7 +80,6 @@ pvdb = {
         "type": "int"
     },
    #special case - do not include in poll parameters
-#TODO: make this a sequence
     "CLEAR_ERROR": {
         "type": "enum",
         'enums': ['Do not clear','Clear']
@@ -88,19 +87,28 @@ pvdb = {
 
     "PRESSURE_UNIT": {
         "type": "enum",
-#OLD        'enums': ['MPa','kgf/cm2','psi','bar']
         'enums': ['kgf/cm2','psi','MPa','bar']
     },
 
     "PRESSURE_UNIT_SET": {
         "type": "enum",
-#OLD        'enums': ['MPa','kgf/cm2','psi','bar']
         'enums': ['kgf/cm2','psi','MPa','bar']
     },
 
     "HOSTNAME": {
         "type": "string"
+    },
+
+    "CONNECTED": {
+        "type": "enum",
+        'enums': ['FALSE','TRUE']
+    },
+
+    "READ_OK": {
+        "type": "enum",
+        'enums': ['FALSE','TRUE']
     }
+
 }
 
 # Pump hostname PV
@@ -131,7 +139,8 @@ properties_to_poll = {
 class EpicsShimadzuPumpDriver(Driver):
 
     def __init__(self, communication_driver, pump_polling_interval, hostname):
-        connectionError = True # Also set when pump is not connected
+        self.connectionError = True # Also set when pump is not connected
+        self.readError = True # may be connected but could not read pump params - always true when connectionError true
         Driver.__init__(self)
         _logger.info("Starting epics driver with polling interval '%s' seconds.", pump_polling_interval)
 
@@ -149,14 +158,19 @@ class EpicsShimadzuPumpDriver(Driver):
         self.polling_thread.start()
 
     # Login to the pump, sleep and retry if not connected.
-    def try_connect():
-        while(connectionError):
+    def try_connect(self):
+        while(self.connectionError):
             try:
                 self.communication_driver.login()
-                connectionError=False
+                self.connectionError=False
+                self.readError=False
+                super().setParam("CONNECTED", 1)
+                super().setParam("READ_OK", 1)
+                self.updatePVs()
             except exceptions.ConnectionError:
                 _logger.warning("Error connecting to pump, will retry in 30 seconds.")
-                connectionError=True
+                self.connectionError=True
+                self.readError=True
         sleep(30)
 
     def poll_pump(self):
@@ -166,7 +180,7 @@ class EpicsShimadzuPumpDriver(Driver):
             try:
                 # Poll pump, sleep and retry if not connected.
                 # However if pump was turned off and back on, we need to log back in first via the other thread.
-                if (not connectionError):
+                if (not self.connectionError):
                     pump_data = self.communication_driver.get_all()
 
                     for pump_property, pv_name in properties_to_poll.items():
@@ -182,18 +196,32 @@ class EpicsShimadzuPumpDriver(Driver):
                         _logger.debug("Pump property '%s'='%s'", pump_property, value)
 
                         super().setParam(pv_name, value)
+                        # Ensure that pressure unit set PV matches readback
+                        if pump_property == "pressure_unit":
+                           super().setParam("PRESSURE_UNIT_SET", value)
+
+                        # Clear read error if necessary
+                        if self.readError:
+                           super().setParam("READ_OK", 1)
+                           self.readError = False
+
                         self.updatePVs()
                 
             except exceptions.ConnectionError:
-               _logger.warning("Error connecting to pump, will retry in 15s + poll interval.")
-               connectionError = True
+               _logger.warning("Error connecting to pump, will check again in 15s + poll interval.")
+               self.connectionError = True
+               self.readError = True
+               super().setParam("CONNECTED", 0)
+               super().setParam("READ_OK", 0)
+               self.updatePVs()
                sleep(15)
 
             except:
                 _logger.exception("Connected but could not read pump properties.")
-                connectionError = True
+                self.readError = True
+                super().setParam("READ_OK", 0)
 
-            server.process(0.1)
+            self.updatePVs()
             sleep(self.pump_polling_interval)
 
     def write(self, reason, value):
@@ -212,8 +240,11 @@ class EpicsShimadzuPumpDriver(Driver):
                 super().setParam(reason, value)
                 # If PV was the error reset request, reset it.
                 if reason == "CLEAR_ERROR":
-                  super().setParam(reason, "Do not clear")
-                   
+                  super().setParam(reason, 0)
+                # If PV was the valve state, set EVENT and thus relay outputs accordingly using valve_dict.
+                if reason == "VALVE_STATE":
+                  super.setParam("EVENT", valve_dict[super.getParam(reason)])
+ 
                 self.updatePVs()
 
             except:
