@@ -56,7 +56,7 @@ pvdb = {
 
     "VALVE_STATE": {
         "type": "enum",
-        'enums': ["Both A+B syringe", "A sample, B syringe", "A syringe, B sample", "Both A+B sample"]
+        'enums': ["Pressure release (syringe)", "Sample (HPLC)", "Do not use", "Do not use"]
     },
 
     "EVENT": {
@@ -122,17 +122,17 @@ properties_to_poll = {
     "pressure_unit": "PRESSURE_UNIT"
 }
 
-# Translation from valve states to event PV / relay output, implemented in code
+# Translation from valve states to event PV / relay output, implemented in code with enum as integer
 # Valve A | Valve B  | Event val 
 #    0          0       0
 #    1          0       1
 #    0          1       2
 #    1          1       12
 valve_dict= {
-"Both A+B syringe" : 0,
-"A sample, B syringe": 1,
-"A syringe, B sample": 2,
-"Both A+B sample": 12
+0: 0,
+1: 1,
+2: 2,
+3: 12
 }
 class EpicsShimadzuPumpDriver(Driver):
 
@@ -166,7 +166,7 @@ class EpicsShimadzuPumpDriver(Driver):
                 super().setParam("READ_OK", 1)
                 self.updatePVs()
             except exceptions.ConnectionError:
-                _logger.warning("Error connecting to pump, will retry in 30 seconds + poll interval.")
+                _logger.warning("Error connecting to pump, will retry in 30s + poll interval.")
                 self.connectionError=True
                 self.readError=True
                 sleep(30)
@@ -224,13 +224,22 @@ class EpicsShimadzuPumpDriver(Driver):
 
     def write(self, reason, value):
 
-         # The PV is a pump parameter, or valve state request.
+         # The PV is valve state request.
          # Valve state request sets underlying relay state via EVENT output according to valve_dict.
-        if reason in write_pvname_to_shimadzu_property or reason == "VALVE_STATE":
-            if reason == "VALVE_STATE":
-              _logger.info("Setting event output according to valve state %s", super().getParam(reason))
-              value = valve_dict[super().getParam(reason)]) #problem is, this now has to be set in the pump...preferably not via a hacky way
-              reason = "EVENT" #try the hacky way
+        if reason == "VALVE_STATE":
+            try: 
+              _logger.info("Setting valve state PV.")
+              super().setParam(reason,value)
+              self.updatePVs()
+              reason = "EVENT_SET"
+              value = valve_dict[value] # this has to be set in the pump according to valve state dict
+
+            except:
+                _logger.exception("Could not set valve state PV.")
+
+
+         # The PV is a pump parameter.
+        if reason in write_pvname_to_shimadzu_property:
 
             pump_value_name = write_pvname_to_shimadzu_property[reason]
 
