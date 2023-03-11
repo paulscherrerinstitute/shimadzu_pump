@@ -7,12 +7,12 @@ from tests.utils import start_test_ioc
 
 
 def main():
-    parser = ArgumentParser()
-    parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC.")
-    parser.add_argument("--polling_interval", default=1, type=float, help="Pump polling interval.")
+    parser = ArgumentParser(description='Shimadzu HPLC CBM20 IOC test')
+    parser.add_argument("ioc_prefix", type=str, help="Prefix of the IOC, include separator.")
+    parser.add_argument("--polling_interval", default=1, type=float, help="Pump polling interval, default 1s.")
     parser.add_argument("--log_level", default="WARNING",
                         choices=['CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG'],
-                        help="Log level to use.")
+                        help="Log level to use, default WARNING.")
 
     arguments = parser.parse_args()
 

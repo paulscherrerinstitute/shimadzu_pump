@@ -1,8 +1,7 @@
-[![Build Status](https://travis-ci.org/paulscherrerinstitute/shimadzu_pump.svg?branch=master)](https://travis-ci.org/paulscherrerinstitute/shimadzu_pump)
-
 # Shimadzu CBM20 pump IOC
 IOC for controlling a single Shimadzu CBM20 pump. The library assumes that only 1 pump exists 
-at the connection hostname.  On startup IOC will try connecting to pump every 30 seconds (with default settings).
+at the connection hostname.  On startup IOC will try connecting to pump every 30s and then poll pump
+every 1s (with default settings). If connection to pump is lost IOC will automatically try to reconnect every 30s.
 
 ## Note on web interface
 The web interface only works with Internet Explorer (not Edge).  If you are using a version newer than IE7 you will need to add the IP address/hostname of the Shimadzu to the "Compatibility View Settings" list by using the settings gear on the upper right corner.
@@ -22,10 +21,13 @@ Default IP address (w/o DHCP) is 192.168.200.99
 - \[IOC_PREFIX\] PRESSURE_MAX_SP (Set point for the pump max pressure setting)
 - \[IOC_PREFIX\] PRESSURE_UNIT (Read back value of the remote ops pressure unit)
 - \[IOC_PREFIX\] PRESSURE_UNIT_SET (Set remote ops pressure unit)
+- \[IOC_PREFIX\] VALVE_STATE (Requested valve state - will set relay output accordingly)
 - \[IOC_PREFIX\] EVENT (Read back value of the pump relay outputs setting)
 - \[IOC_PREFIX\] EVENT_SET (Requested relay outputs - see note/table below)
 
-#### Note for 'event' to control the relay outputs, they need to be set to 'event' mode.  Also these are only for the outputs on the remote module! 'EVENT_SET' takes the following syntax: 
+
+#### Note for 'event' and thus VALVE_STATE to control the relay outputs, they need to be set to 'event' mode.  Also these are only for the outputs on the remote module!
+#### 'EVENT_SET' takes the following syntax (now managed internally if you use VALVE_STATE): 
 ```
 Both off: 0
 1 on, 2 off: 1
@@ -90,15 +92,15 @@ usage: shimadzu_pump_ioc [-h] [--polling_interval POLLING_INTERVAL]
 Shimadzu HPLC IOC version (version)
 
 positional arguments:
-  ioc_prefix            Prefix of the IOC (include seperator).
+  ioc_prefix            Prefix of the IOC, include separator.
   pump_host             Pump host.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --polling_interval POLLING_INTERVAL
-                        Pump polling interval.
+                        Pump polling interval, default 1s.
   --log_level {CRITICAL,ERROR,WARNING,INFO,DEBUG}
-                        Log level to use.
+                        Log level to use, default WARNING.
 ```
 
 ### Conda installation
@@ -131,7 +133,4 @@ This will create an IOC with a simulated pump that is functionally equal to the 
 
 ### Initial pump setup
 Note CBM setting needs to be set to "internal" if CBM is installed inside Shimadzu pump.  This is reached through the System settings.
-
-# TODOs
-- Turn event setting into more user friendly valve state interface
 

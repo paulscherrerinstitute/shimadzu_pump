@@ -49,7 +49,8 @@ def start_test_ioc(ioc_prefix, polling_interval):
 
     communication_driver = MockShimadzuCbm20()
     driver = EpicsShimadzuPumpDriver(communication_driver=communication_driver,
-                                     pump_polling_interval=polling_interval)
+                                     pump_polling_interval=polling_interval,
+                                     hostname="dummyPump")
 
     try:
 

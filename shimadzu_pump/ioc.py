@@ -167,7 +167,7 @@ class EpicsShimadzuPumpDriver(Driver):
                 _logger.info("Now connected to pump.")
                 self.updatePVs()
             except exceptions.ConnectionError:
-                _logger.warning("Error connecting to pump, will retry in 30s + poll interval.")
+                _logger.warning("Error connecting to pump, will retry in 30s.")
                 self.connectionError=True
                 self.readError=True
                 sleep(30)
@@ -207,13 +207,13 @@ class EpicsShimadzuPumpDriver(Driver):
                         self.updatePVs()
                 
             except exceptions.ConnectionError:
-               _logger.warning("Error connecting to pump while polling, will check again in 15s + poll interval.")
+               _logger.warning("Error connecting to pump while polling, will check again in 30s + poll interval.")
                self.connectionError = True
                self.readError = True
                super().setParam("CONNECTED", 0)
                super().setParam("READ_OK", 0)
                self.updatePVs()
-               sleep(15)
+               sleep(30)
 
             except:
                 _logger.exception("Connected but could not read pump properties.")
