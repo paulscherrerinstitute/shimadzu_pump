@@ -56,7 +56,7 @@ pvdb = {
 
     "VALVE_STATE": {
         "type": "enum",
-        'enums': ["Pressure release (syringe)", "Sample (HPLC)", "Do not use", "Do not use"]
+        'enums': ["Pres. release (syringe)", "Sample (HPLC)", "Do not use", "Do not use"]
     },
 
     "EVENT": {
@@ -164,6 +164,7 @@ class EpicsShimadzuPumpDriver(Driver):
                 self.readError=False
                 super().setParam("CONNECTED", 1)
                 super().setParam("READ_OK", 1)
+                _logger.info("Now connected to pump.")
                 self.updatePVs()
             except exceptions.ConnectionError:
                 _logger.warning("Error connecting to pump, will retry in 30s + poll interval.")
@@ -206,7 +207,7 @@ class EpicsShimadzuPumpDriver(Driver):
                         self.updatePVs()
                 
             except exceptions.ConnectionError:
-               _logger.warning("Error connecting to pump, will check again in 15s + poll interval.")
+               _logger.warning("Error connecting to pump while polling, will check again in 15s + poll interval.")
                self.connectionError = True
                self.readError = True
                super().setParam("CONNECTED", 0)
@@ -224,47 +225,20 @@ class EpicsShimadzuPumpDriver(Driver):
 
     def write(self, reason, value):
 
-         # The PV is valve state request.
-         # Valve state request sets underlying relay state via EVENT output according to valve_dict.
-        if reason == "VALVE_STATE":
-            try: 
-              _logger.info("Setting valve state PV.")
-              super().setParam(reason,value)
-              self.updatePVs()
-              reason = "EVENT_SET"
-              value = valve_dict[value] # this has to be set in the pump according to valve state dict
+        try:
 
-            except:
-                _logger.exception("Could not set valve state PV.")
+             # The PV is valve state request.
+             # Valve state request sets underlying relay state via EVENT output according to valve_dict.
+            if reason == "VALVE_STATE" and not self.connectionError:
 
-
-         # The PV is a pump parameter.
-        if reason in write_pvname_to_shimadzu_property:
-
-            pump_value_name = write_pvname_to_shimadzu_property[reason]
-
-            try:
-
-                _logger.info("Setting pump property '%s' to values '%s'.", pump_value_name, value)
-
-                self.communication_driver.set(pump_value_name, value)
-
-                super().setParam(reason, value)
-                # If PV was the error reset request, reset it.
-                if reason == "CLEAR_ERROR":
-                  super().setParam(reason, 0)
- 
+                _logger.info("Setting valve state PV.")
+                super().setParam(reason,value)
                 self.updatePVs()
+                reason = "EVENT_SET"
+                value = valve_dict[value] # this has to be set in the pump according to valve state dict
 
-         
-
-            except:
-                _logger.exception("Could not set pump property '%s' to value '%s'.", pump_value_name, value)
-
-        # The PV is a START/STOP PV.
-        if reason == "PUMPING_SP":
-
-            try:
+            # The PV is a START/STOP PV.
+            if reason == "PUMPING_SP" and not self.connectionError:
 
                 if value:
                     _logger.info("Starting the pump.")
@@ -277,11 +251,34 @@ class EpicsShimadzuPumpDriver(Driver):
                 super().setParam(reason, value)
                 self.updatePVs()
 
-            except:
-                _logger.exception("Cannot change the pump status ON to '%s'.", value)
+             # The PV is the pump hostname.
+            elif reason == "HOSTNAME" and not self.connectionError:
+                super().setParam(reason, value)
+                self.updatePVs()
 
-         # The PV is the pump hostname.
-        if reason == "HOSTNAME":
-            super().setParam(reason, value)
-            self.updatePVs()
+            # The PV is a pump parameter.
+            elif reason in write_pvname_to_shimadzu_property and not self.connectionError:
 
+                pump_value_name = write_pvname_to_shimadzu_property[reason]
+
+                _logger.info("Setting pump property '%s' to values '%s'.", pump_value_name, value)
+
+                self.communication_driver.set(pump_value_name, value)
+
+                super().setParam(reason, value)
+                # If PV was the error reset request, reset it.
+                if reason == "CLEAR_ERROR":
+                  super().setParam(reason, 0)
+     
+                self.updatePVs()
+
+        except exceptions.ConnectionError:
+           _logger.warning("Error connecting to pump while writing to %s.", reason)
+           self.connectionError = True
+           self.readError = True
+           super().setParam("CONNECTED", 0)
+           super().setParam("READ_OK", 0)
+           self.updatePVs()
+
+        except:
+            _logger.exception("Error writing value %s to %s.", value, reason)

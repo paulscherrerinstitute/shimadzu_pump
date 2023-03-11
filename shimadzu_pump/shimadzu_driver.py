@@ -75,51 +75,68 @@ class ShimadzuCbm20(object):
 
     def login(self, user="Admin", password="Admin"):
 
-        self.logout()
+        try:
+            self.logout()
+    
+            _logger.info("Trying to log in as '%s'.", user)
+    
+            login_data = request_data["login"] % (user, password)
+    
+            response_text = requests.get(self.endpoints["login"], data=login_data, headers=header_data).text
+            _logger.debug("Response from pump: %s", response_text)
+    
+            session_id = extract_element((None, None, "Certification/SessionID", str), response_text)
+            _logger.debug("Received session_id='%s'.", session_id)
+    
+            if not session_id:
+                raise ValueError("You are already logged in. Please logout first.")
+    
+            _logger.info("Logging in as '%s' was successful.", user)
+    
+            return session_id
+         
+        except:
+            raise
 
-        _logger.info("Trying to log in as '%s'.", user)
-
-        login_data = request_data["login"] % (user, password)
-
-        response_text = requests.get(self.endpoints["login"], data=login_data, headers=header_data).text
-        _logger.debug("Response from pump: %s", response_text)
-
-        session_id = extract_element((None, None, "Certification/SessionID", str), response_text)
-        _logger.debug("Received session_id='%s'.", session_id)
-
-        if not session_id:
-            raise ValueError("You are already logged in. Please logout first.")
-
-        _logger.info("Logging in as '%s' was successful.", user)
-
-        return session_id
 
     def logout(self):
 
-        _logger.info("Logging out.")
+        try:
+            _logger.info("Logging out.")
 
-        logout_data = request_data["logout"]
-        response_text = requests.get(self.endpoints["login"], data=logout_data, headers=header_data).text
+            logout_data = request_data["logout"]
+            response_text = requests.get(self.endpoints["login"], data=logout_data, headers=header_data).text
 
-        _logger.debug("Response from pump: %s", response_text)
+            _logger.debug("Response from pump: %s", response_text)
+
+        except:
+            raise
 
     def start(self):
 
-        _logger.info("Starting pump.")
+        try:
+            _logger.info("Starting pump.")
 
-        start_request_data = request_data["start"]
+            start_request_data = request_data["start"]
 
-        response_text = requests.get(self.endpoints["event"], data=start_request_data, headers=header_data).text
-        _logger.debug("Response from pump: %s", response_text)
-
+            response_text = requests.get(self.endpoints["event"], data=start_request_data, headers=header_data).text
+            _logger.debug("Response from pump: %s", response_text)
+        
+        except:
+            raise
+    
     def stop(self):
 
-        _logger.info("Stopping pump.")
+        try:
+            _logger.info("Stopping pump.")
 
-        stop_request_data = request_data["stop"]
+            stop_request_data = request_data["stop"]
 
-        response_text = requests.get(self.endpoints["event"], data=stop_request_data, headers=header_data).text
-        _logger.debug("Response from pump: %s", response_text)
+            response_text = requests.get(self.endpoints["event"], data=stop_request_data, headers=header_data).text
+            _logger.debug("Response from pump: %s", response_text)
+        
+        except:
+            raise
 
     def _get_request_data(self, name, parameters):
         if name not in parameters:
@@ -143,36 +160,47 @@ class ShimadzuCbm20(object):
 
     def set(self, name, value):
 
-        _logger.debug("Setting parameter '%s'='%s'.", name, value)
+        try:
+            _logger.debug("Setting parameter '%s'='%s'.", name, value)
 
-        endpoint, set_request_data, parameter_properties = self._get_request_data(name, set_parameters)
+            endpoint, set_request_data, parameter_properties = self._get_request_data(name, set_parameters)
 
-        pump_parameter_name = parameter_properties[2]
-        set_request_data = set_request_data % {"name": pump_parameter_name, "value": value}
+            pump_parameter_name = parameter_properties[2]
+            set_request_data = set_request_data % {"name": pump_parameter_name, "value": value}
 
-        response_text = requests.get(endpoint, data=set_request_data, headers=header_data).text
-        _logger.debug("Response from pump: %s", response_text)
+            response_text = requests.get(endpoint, data=set_request_data, headers=header_data).text
+            _logger.debug("Response from pump: %s", response_text)
 
-        return extract_element(get_parameters[name], response_text)
+            return extract_element(get_parameters[name], response_text)
+
+        except:
+            raise
 
     def get(self, name):
 
-        _logger.debug("Getting parameter '%s'.", name)
+        try:
+            _logger.debug("Getting parameter '%s'.", name)
 
-        endpoint, get_request_data, parameter_properties = self._get_request_data(name, get_parameters)
+            endpoint, get_request_data, parameter_properties = self._get_request_data(name, get_parameters)
 
-        response_text = requests.get(endpoint, data=get_request_data, headers=header_data).text
-        _logger.debug("Response from pump: %s", response_text)
+            response_text = requests.get(endpoint, data=get_request_data, headers=header_data).text
+            _logger.debug("Response from pump: %s", response_text)
 
+        except:
+            raise
+        
         return extract_element(get_parameters[name], response_text)
 
     def get_all(self):
+        
+        try:
+            _logger.debug("Getting all parameters.")
 
-        _logger.debug("Getting all parameters.")
-
-        data = {}
-        for parameter_name in get_parameters.keys():
-            if parameter_name != "clear_error":
-                data[parameter_name] = self.get(parameter_name)
-
+            data = {}
+            for parameter_name in get_parameters.keys():
+                if parameter_name != "clear_error":
+                    data[parameter_name] = self.get(parameter_name)
+        except:
+            raise
+        
         return data
