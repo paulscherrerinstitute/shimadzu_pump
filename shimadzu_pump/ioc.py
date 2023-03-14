@@ -155,9 +155,10 @@ class EpicsShimadzuPumpDriver(Driver):
         self.polling_thread.setDaemon(True)
         self.polling_thread.start()
 
-    # Login to the pump, sleep and retry if not connected.
+    # Login to the pump, sleep 15s and retry if not connected.  Will sleep 30s if encounters a connection error.
     def try_connect(self):
-        while(self.connectionError):
+        while(True):
+          if self.connectionError:
             try:
                 self.communication_driver.login()
                 self.connectionError=False
@@ -168,9 +169,12 @@ class EpicsShimadzuPumpDriver(Driver):
                 self.updatePVs()
             except exceptions.ConnectionError:
                 _logger.warning("Error connecting to pump, will retry in 30s.")
-                self.connectionError=True
                 self.readError=True
-                sleep(30)
+                super().setParam("CONNECTED", 0)
+                super().setParam("READ_OK", 0)
+                self.updatePVs()
+                sleep(15)
+          sleep(15)
 
     def poll_pump(self):
 

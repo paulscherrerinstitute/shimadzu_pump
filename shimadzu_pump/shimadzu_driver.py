@@ -78,7 +78,7 @@ class ShimadzuCbm20(object):
         try:
             self.logout()
     
-            _logger.info("Trying to log in as '%s'.", user)
+            _logger.info("Attempting to login as '%s'.", user)
     
             login_data = request_data["login"] % (user, password)
     
@@ -102,7 +102,7 @@ class ShimadzuCbm20(object):
     def logout(self):
 
         try:
-            _logger.info("Logging out.")
+            _logger.info("Attempting logout.")
 
             logout_data = request_data["logout"]
             response_text = requests.get(self.endpoints["login"], data=logout_data, headers=header_data).text
