@@ -270,7 +270,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Valve Position</string>
+     <string>Set Valve Position</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -454,14 +454,14 @@
    <widget class="caImage" name="caimage_2">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>200</y>
-      <width>471</width>
-      <height>251</height>
+      <x>80</x>
+      <y>290</y>
+      <width>201</width>
+      <height>191</height>
      </rect>
     </property>
     <property name="filename" stdset="0">
-     <string notr="true">Valvepos.jpg</string>
+     <string notr="true">valve_pos_0.png</string>
     </property>
    </widget>
    <widget class="caChoice" name="cachoice">
@@ -540,6 +540,129 @@ Both off: 0
 1 on, 2 off: 1
 2 on, 1 off: 2
 Both 1 and 2 on: 12</string>
+    </property>
+   </widget>
+   <widget class="caImage" name="caimage_3">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>290</y>
+      <width>201</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="filename" stdset="0">
+     <string notr="true">valve_pos_1.png</string>
+    </property>
+   </widget>
+   <widget class="caLed" name="valvePos0_LED">
+    <property name="geometry">
+     <rect>
+      <x>168</x>
+      <y>270</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;RED = OFF&lt;/p&gt;&lt;p&gt;GREEN = ON&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="channel" stdset="0">
+     <string notr="true">$(S):EVENT</string>
+    </property>
+    <property name="falseColor">
+     <color>
+      <red>255</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+    </property>
+    <property name="trueColor">
+     <color>
+      <red>0</red>
+      <green>170</green>
+      <blue>0</blue>
+     </color>
+    </property>
+    <property name="trueValue">
+     <string notr="true">0</string>
+    </property>
+    <property name="falseValue">
+     <string notr="true">1</string>
+    </property>
+   </widget>
+   <widget class="caLed" name="valvePos1_LED">
+    <property name="geometry">
+     <rect>
+      <x>367</x>
+      <y>270</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;RED = OFF&lt;/p&gt;&lt;p&gt;GREEN = ON&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="channel" stdset="0">
+     <string notr="true">$(S):EVENT</string>
+    </property>
+    <property name="falseColor">
+     <color>
+      <red>255</red>
+      <green>0</green>
+      <blue>0</blue>
+     </color>
+    </property>
+    <property name="trueColor">
+     <color>
+      <red>0</red>
+      <green>170</green>
+      <blue>0</blue>
+     </color>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>250</y>
+      <width>131</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Valve Position: 0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>250</y>
+      <width>131</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Valve Position: 1</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>
